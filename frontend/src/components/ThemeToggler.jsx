@@ -25,12 +25,12 @@ const ThemeToggler = () => {
   };
 
   return (
-    <div
+    <button
       onClick={toggleTheme}
-      className="cursor-pointer p-2 rounded-full hover:bg-base-200 transition"
+      className="btn btn-ghost btn-circle"
     >
       {theme === "light" ? <Moon /> : <SunMedium />}
-    </div>
+    </button>
   );
 };
 

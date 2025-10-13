@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import ThemeToggler from "./components/ThemeToggler";
 import Navbar from "./components/Navbar";
+import CartPage from "./pages/CartPage";
+import HomePage from "./pages/HomePage";
+import PlaceOrderPage from "./pages/PlaceOrderPage";
 
 const App = () => {
-  // Initialize from local storage or fallback to system / default
   return (
     <div>
       <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/order" element={<PlaceOrderPage />} />
+      </Routes>
     </div>
   );
 };

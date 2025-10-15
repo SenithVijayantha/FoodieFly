@@ -1,3 +1,8 @@
+import play_store from "./play-store.png";
+import apple from "./apple.png";
+
+export const icons = { play_store, apple };
+
 export const menu_list = [
   {
     menu_name: "Salad",

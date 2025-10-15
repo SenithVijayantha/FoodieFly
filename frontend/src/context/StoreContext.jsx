@@ -15,6 +15,8 @@ const StoreContextProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
+    // Getting minus number for count hasn't handled here because the frontend 
+    // will only display the decrement button when the count is higher than zero.
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
   };
 

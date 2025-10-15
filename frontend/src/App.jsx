@@ -6,10 +6,12 @@ import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import Footer from "./components/Footer";
+import LoginForm from "./components/LoginForm";
 
 const App = () => {
   return (
     <div className="max-w-[1920px] mx-auto">
+      <LoginForm />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

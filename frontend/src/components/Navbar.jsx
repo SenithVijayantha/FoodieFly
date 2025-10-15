@@ -66,7 +66,12 @@ const Navbar = () => {
           <ShoppingCart />
         </button>
         <ThemeToggler />
-        <button className="btn btn-outline">Sign in</button>
+        <button
+          onClick={() => document.getElementById("my_modal_2").showModal()}
+          className="btn btn-outline"
+        >
+          Sign in
+        </button>
       </div>
     </div>
   );

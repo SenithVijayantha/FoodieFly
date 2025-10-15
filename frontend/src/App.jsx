@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/order" element={<PlaceOrderPage />} />
       </Routes>
+      <Footer />
     </div>
   );
 };

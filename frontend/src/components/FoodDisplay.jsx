@@ -6,8 +6,8 @@ const FoodDisplay = ({ category }) => {
   const { food_list } = useContext(StoreContext);
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-center my-16">
+    <div className="py-16">
+      <h2 className="text-2xl font-semibold text-center mb-16">
         Top dishes near you
       </h2>
       <div
@@ -16,16 +16,21 @@ const FoodDisplay = ({ category }) => {
           gridTemplateColumns: "repeat(auto-fit, 336px)",
         }}
       >
-        {food_list.map((item, index) => (
-          <FoodCard
-            key={index}
-            id={item._id}
-            name={item.name}
-            description={item.description}
-            price={item.price}
-            image={item.image}
-          />
-        ))}
+        {food_list.map((item, index) => {
+          if (category === "All" || category === item.category) {
+            // If selected category is equal to category of the item only the that item will return
+            return (
+              <FoodCard
+                key={index}
+                id={item._id}
+                name={item.name}
+                description={item.description}
+                price={item.price}
+                image={item.image}
+              />
+            );
+          }
+        })}
       </div>
     </div>
   );

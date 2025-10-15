@@ -8,7 +8,7 @@ import PlaceOrderPage from "./pages/PlaceOrderPage";
 
 const App = () => {
   return (
-    <div>
+    <div className="max-w-[1920px] mx-auto">
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

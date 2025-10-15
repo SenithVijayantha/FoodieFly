@@ -4,7 +4,7 @@ import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   return (
-    <div className="sticky top-0 z-10 navbar bg-primary shadow-sm">
+    <div className="max-w-[1920px] sticky top-0 z-10 navbar bg-primary shadow-sm">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -26,25 +26,25 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-primary rounded-box z-1 mt-6 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content rounded-box z-10 mt-6 w-52 p-2 shadow-lg bg-primary "
           >
             <li>
-              <a>Home</a>
+              <a href="#home">Home</a>
             </li>
             <li>
-              <a>Menu</a>
+              <a href="#menu">Menu</a>
             </li>
             <li>
-              <a>Mobile App</a>
+              <a href="#mobile-app">Mobile App</a>
             </li>
             <li>
-              <a>Contact Us</a>
+              <a href="#footer">Contact Us</a>
             </li>
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">FoodieFly</a>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end sm:gap-2">
         <button className="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"

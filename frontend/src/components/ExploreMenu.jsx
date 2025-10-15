@@ -5,7 +5,7 @@ import { menu_list } from "../assets/assets";
 const ExploreMenu = ({ category, setCategory }) => {
   return (
     <>
-      <div className="flex md:justify-center gap-3 overflow-x-scroll py-5 px-5 no-scrollbar">
+      <div id="menu" className="flex md:justify-center gap-3 overflow-x-scroll py-5 px-5 no-scrollbar">
         {menu_list.map((item, index) => (
           <div
             key={index}

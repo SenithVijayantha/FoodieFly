@@ -2,7 +2,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="footer sm:footer-horizontal bg-primary text-neutral-content p-10">
+    <footer
+      id="footer"
+      className="footer sm:footer-horizontal bg-primary text-neutral-content p-10"
+    >
       <aside>
         <div className="flex items-center gap-2">
           <img width={40} src="/logo.png" alt="" />
@@ -19,16 +22,16 @@ const Footer = () => {
         <h6 className="footer-title text-2xl">COMPANY</h6>
         <ul tabIndex="-1" className="">
           <li>
-            <a>Home</a>
+            <a href="#home">Home</a>
           </li>
           <li>
-            <a>Menu</a>
+            <a href="#menu">Menu</a>
           </li>
           <li>
-            <a>Mobile App</a>
+            <a href="#mobile-app">Mobile App</a>
           </li>
           <li>
-            <a>Contact Us</a>
+            <a href="#footer">Contact Us</a>
           </li>
         </ul>
         <aside></aside>

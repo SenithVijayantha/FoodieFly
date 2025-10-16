@@ -1,8 +1,13 @@
 import React from "react";
 import ThemeToggler from "./ThemeToggler";
 import { ShoppingCart } from "lucide-react";
+import { Link } from "react-router";
+import { useContext } from "react";
+import { StoreContext } from "../context/StoreContext";
 
 const Navbar = () => {
+  const { cartItemsCount } = useContext(StoreContext);
+
   return (
     <div className="max-w-[1920px] sticky top-0 z-10 navbar bg-primary shadow-sm">
       <div className="navbar-start">
@@ -42,7 +47,9 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">FoodieFly</a>
+        <Link to="/" className="btn btn-ghost text-xl">
+          FoodieFly
+        </Link>
       </div>
       <div className="navbar-end sm:gap-2">
         <button className="btn btn-ghost btn-circle">
@@ -62,9 +69,16 @@ const Navbar = () => {
             />{" "}
           </svg>
         </button>
-        <button className="btn btn-ghost btn-circle">
+        <Link to="/cart" className="indicator btn btn-ghost btn-circle">
           <ShoppingCart />
-        </button>
+          {cartItemsCount > 0 ? (
+            <span className="badge badge-sm indicator-item">
+              {cartItemsCount}
+            </span>
+          ) : (
+            <></>
+          )}
+        </Link>
         <ThemeToggler />
         <button
           onClick={() => document.getElementById("my_modal_2").showModal()}

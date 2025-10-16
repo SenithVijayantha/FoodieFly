@@ -2,16 +2,27 @@ import React, { useContext } from "react";
 import { X } from "lucide-react";
 
 import { StoreContext } from "../context/StoreContext";
+import { useNavigate } from "react-router";
 
 const CartPage = () => {
-  const { cartItems, food_list, removeFromCart, getTotalCartItemsPrice } =
-    useContext(StoreContext);
+  const {
+    cartItems,
+    food_list,
+    removeFromCart,
+    getTotalCartItemsPrice,
+    cartItemsCount,
+  } = useContext(StoreContext);
+  const navigate = useNavigate();
 
-  const deliveryFee = 2;
+  let deliveryFee = 0;
+
+  if (cartItemsCount > 0) {
+    deliveryFee = 2;
+  }
 
   return (
     <div>
-      {Object.keys(cartItems).length !== 0 && (
+      {cartItemsCount !== 0 && (
         <div className="overflow-x-auto">
           <table className="table">
             {/* head */}
@@ -94,7 +105,13 @@ const CartPage = () => {
               </tr>
             </tbody>
           </table>
-          <button className="btn btn-primary btn-sm">CHECKOUT</button>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => navigate("/order")}
+            disabled={cartItemsCount === 0}
+          >
+            CHECKOUT
+          </button>
         </div>
 
         <div className="py-10">

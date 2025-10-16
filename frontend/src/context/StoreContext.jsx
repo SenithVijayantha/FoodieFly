@@ -15,20 +15,34 @@ const StoreContextProvider = ({ children }) => {
   };
 
   const removeFromCart = (itemId) => {
-    // Getting minus number for count hasn't handled here because the frontend 
+    // Getting minus number for count hasn't handled here because the frontend
     // will only display the decrement button when the count is higher than zero.
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
   };
 
-  useEffect(() => {
-    console.log(cartItems);
-  }, [cartItems]);
+  const getTotalCartItemsAmount = () => {
+    let totalAmount = 0;
+
+    for (const item in cartItems) {
+      if (cartItems[item] > 0) {
+        let itemInfo = food_list.find((product) => product._id === item);
+        totalAmount += itemInfo.price * cartItems[item];
+      }
+    }
+
+    return totalAmount;
+  };
+
+  // useEffect(() => {
+  //   console.log(cartItems);
+  // }, [cartItems]);
 
   const value = {
     food_list,
     cartItems,
     addToCart,
     removeFromCart,
+    getTotalCartItemsAmount,
   };
 
   return (

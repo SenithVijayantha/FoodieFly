@@ -6,18 +6,21 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
+  const [cartItemsCount, setCartItemsCount] = useState(0);
 
   const addToCart = (itemId) => {
     setCartItems((prev) => {
       if (!prev[itemId]) return { ...prev, [itemId]: 1 };
       return { ...prev, [itemId]: prev[itemId] + 1 };
     });
+    setCartItemsCount(cartItemsCount + 1);
   };
 
   const removeFromCart = (itemId) => {
     // Getting minus number for count hasn't handled here because the frontend
     // will only display the decrement button when the count is higher than zero.
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    setCartItemsCount(cartItemsCount - 1);
   };
 
   const getTotalCartItemsPrice = () => {
@@ -43,6 +46,7 @@ const StoreContextProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     getTotalCartItemsPrice,
+    cartItemsCount,
   };
 
   return (

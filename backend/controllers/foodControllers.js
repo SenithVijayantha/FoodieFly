@@ -50,3 +50,38 @@ export const getFoodsList = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+// remove food items
+export const removeFood = async (req, res) => {
+  try {
+    const foodId = req.body.id;
+    if (!foodId) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide an id",
+      });
+    }
+
+    const food = await foodModel.findById(foodId);
+    if (!food) {
+      return res.status(404).json({
+        success: false,
+        message: "Food item not found",
+      });
+    }
+
+    fs.unlink(`./uploads/${food.image}`, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+
+    await foodModel.findByIdAndDelete(foodId);
+    return res
+      .status(200)
+      .json({ success: true, message: "Item deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

@@ -7,6 +7,11 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [cartItemsCount, setCartItemsCount] = useState(0);
+  let deliveryFee = 0;
+
+  if (cartItemsCount > 0) {
+    deliveryFee = 2;
+  }
 
   const addToCart = (itemId) => {
     setCartItems((prev) => {
@@ -47,6 +52,7 @@ const StoreContextProvider = ({ children }) => {
     removeFromCart,
     getTotalCartItemsPrice,
     cartItemsCount,
+    deliveryFee,
   };
 
   return (

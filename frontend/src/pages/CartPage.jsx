@@ -11,14 +11,9 @@ const CartPage = () => {
     removeFromCart,
     getTotalCartItemsPrice,
     cartItemsCount,
+    deliveryFee,
   } = useContext(StoreContext);
   const navigate = useNavigate();
-
-  let deliveryFee = 0;
-
-  if (cartItemsCount > 0) {
-    deliveryFee = 2;
-  }
 
   return (
     <div>

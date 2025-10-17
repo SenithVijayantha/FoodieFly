@@ -4,6 +4,7 @@ import http from "node:http";
 import cors from "cors";
 
 import { connectDB } from "./config/db.js";
+import foodRouter from "./routes/foodRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -16,6 +17,10 @@ app.use(cors());
 app.get("/api/status", (req, res) => {
   res.send("Server is listening");
 });
+
+// endpoints
+app.use("/api/food", foodRouter);
+app.use("/images", express.static("uploads"));
 
 const server = http.createServer(app);
 

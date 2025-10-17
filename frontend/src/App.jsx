@@ -10,7 +10,7 @@ import LoginForm from "./components/LoginForm";
 
 const App = () => {
   return (
-    <div className="max-w-[1920px] mx-auto">
+    <div className="max-w-[1920px] mx-auto min-h-screen">
       <LoginForm />
       <Navbar />
       <Routes>

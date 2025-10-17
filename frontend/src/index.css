@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: themes: light --default, dark --prefersdark, cupcake;
+  themes: light --default, dark --prefersdark;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

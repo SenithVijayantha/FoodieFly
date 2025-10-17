@@ -13,16 +13,17 @@ const AppDownload = () => {
         <span className="font-bold">FoodieFly</span> App
       </p>
       <div className="flex gap-4 flex-col sm:flex-row">
-        <button className="btn bg-black py-8 rounded-lg">
+        <button className="btn bg-black py-8 rounded-lg hover:scale-105 transition-transform">
           <img width={40} src={icons.play_store} alt="play store icon" />
           <div className="flex flex-col text-start">
             <span>Get it on</span> <span className="text-xl">Google Play</span>
-          </div>    
+          </div>
         </button>
-        <button className="btn bg-black py-8 rounded-lg">
+        <button className="btn bg-black py-8 rounded-lg hover:scale-105 transition-transform">
           <img width={40} src={icons.apple} alt="app store icon" />
           <div className="flex flex-col text-start">
-            <span>Download it on</span> <span className="text-xl">App Store</span>
+            <span>Download it on</span>{" "}
+            <span className="text-xl">App Store</span>
           </div>
         </button>
       </div>

@@ -1,34 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { SunMedium, Moon } from "lucide-react";
 
-const ThemeToggler = () => {
-  const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") {
-      return stored;
+const getInitialTheme = () => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    const storedTheme = window.localStorage.getItem("theme");
+    if (typeof storedTheme === "string" && (storedTheme === "light" || storedTheme === "dark")) {
+      return storedTheme;
     }
-    // fallback to system preference
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  });
+
+    const userMedia = window.matchMedia("(prefers-color-scheme: dark)");
+    if (userMedia.matches) {
+      return "dark";
+    }
+  }
+
+  return "light"; // default theme
+};
+
+
+const ThemeToggler = () => {
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
-    // Set data-theme attribute on html
     document.documentElement.setAttribute("data-theme", theme);
-    // Save choice
     localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="btn btn-ghost btn-circle"
-    >
+    <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
       {theme === "light" ? <Moon /> : <SunMedium />}
     </button>
   );

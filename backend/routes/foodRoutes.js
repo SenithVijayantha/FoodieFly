@@ -1,20 +1,29 @@
 import express from "express";
 import multer from "multer";
 
-import { addFood } from "../controllers/foodControllers.js";
+import { addFood, getFoodsList } from "../controllers/foodControllers.js";
 
 const foodRouter = express.Router();
 
 // Image storage engine
 const storage = multer.diskStorage({
-  destination: "uploads",
+  destination: "./uploads",
   filename: (req, file, callback) => {
     return callback(null, `${Date.now()}${file.originalname}`);
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter(req, file, callback) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return callback(new Error("Only image files are allowed"));
+    }
+    callback(null, true);
+  },
+});
 
 foodRouter.post("/add", upload.single("image"), addFood);
+foodRouter.get("/list", getFoodsList);
 
 export default foodRouter;

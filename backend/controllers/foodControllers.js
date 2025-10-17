@@ -53,14 +53,16 @@ export const getFoodsList = async (req, res) => {
 
 // remove food items
 export const removeFood = async (req, res) => {
+  console.log(req.body);
   try {
-    const foodId = req.body.id;
-    if (!foodId) {
+    if (!req.body || !req.body.id) {
       return res.status(400).json({
         success: false,
         message: "Please provide an id",
       });
     }
+
+    const foodId = req.body.id;
 
     const food = await foodModel.findById(foodId);
     if (!food) {

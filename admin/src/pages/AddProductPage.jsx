@@ -45,7 +45,7 @@ const AddProductPage = () => {
     // console.log(productDetails);
 
     try {
-      const response = await axios.post(`${backendUrl}/food/add`, formData);
+      const response = await axios.post(`${backendUrl}/api/food/add`, formData);
 
       if (response.data.success) {
         setProductDetails({
@@ -59,13 +59,13 @@ const AddProductPage = () => {
         e.target.reset();
         toast.success("Product added successfully!");
       } else {
-        console.error(
-          "Failed to submit form:",
-          error.response ? error.response.data : error.message
-        );
+        console.error("API Error:", response.data.message);
         toast.error(response.data.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Failed to submit form:", error.response ? error.response.data : error.message);
+      toast.error("Failed to add product. Please try again.");
+    }
   };
 
   return (

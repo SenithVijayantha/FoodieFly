@@ -1,51 +1,108 @@
 import React, { useState } from "react";
 
 const AddProductPage = () => {
-  const [priceInputValue, setPriceInputValue] = useState("");
+  const [image, setImage] = useState(null);
+  const [productDetails, setProductDetails] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+  });
+
+  const handleProductDetails = (e) => {
+    setProductDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handlePriceInputChange = (e) => {
     const rawValue = e.target.value;
 
     const numericRegex = /^-?(\d*\.?\d*)$/;
 
-    if (rawValue === "." || numericRegex.test(rawValue)) {
-      setPriceInputValue(rawValue);
+    if (
+      rawValue === "" ||
+      rawValue === "." ||
+      rawValue === "-" ||
+      numericRegex.test(rawValue)
+    ) {
+      // ONLY call the setter function if the input is valid
+      handleProductDetails(e);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", productDetails.name);
+    formData.append("description", productDetails.description);
+    formData.append("price", productDetails.price);
+    formData.append("category", productDetails.category);
+    formData.append("description", productDetails.description);
+    formData.append("image", image);
+    // console.log(productDetails);
   };
 
   return (
     <div className="pl-16">
-      <form className="fieldset rounded-box p-4">
+      <form className="fieldset rounded-box p-4" onSubmit={handleSubmit}>
         <label className="label text-[16px]">Upload Image</label>
-        <input type="file" className="file-input" />
+        <input
+          type="file"
+          className="file-input"
+          required
+          onChange={(e) => setImage(e.target.files[0])}
+        />
 
         <label className="label text-[16px]">Product name</label>
-        <input type="text" className="input" placeholder="Type here" />
+        <input
+          name="name"
+          type="text"
+          className="input"
+          placeholder="Type here"
+          onChange={handleProductDetails}
+          value={productDetails.name}
+          required
+        />
 
         <label className="label text-[16px]">Product Description</label>
         <textarea
+          name="description"
           className="textarea"
           placeholder="Write content here"
+          value={productDetails.description}
+          onChange={handleProductDetails}
+          required
         ></textarea>
 
         <label className="label text-[16px]">Product Category</label>
-        <select defaultValue="Pick a color" className="select">
+        <select
+          defaultValue="Pick a color"
+          className="select"
+          name="category"
+          onChange={handleProductDetails}
+          required
+        >
           <option disabled={true}>Pick a color</option>
-          <option>Salad</option>
-          <option>Beverages</option>
-          <option>Desserts</option>
-          <option>Starters</option>
-          <option>Main Course</option>
-          <option>Sides</option>
+          <option value="Salad">Salad</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Desserts">Desserts</option>
+          <option value="Starters">Starters</option>
+          <option value="Main Course">Main Course</option>
+          <option value="Sides">Sides</option>
         </select>
 
         <label className="label text-[16px]">Product Price</label>
         <input
-          type="number"
-          class="input"
+          type="text"
+          className="input"
+          name="price"
           placeholder="$32.00"
-          value={priceInputValue}
+          value={productDetails.price}
           onChange={handlePriceInputChange}
+          required
+          //   attributes to trigger numeric keyboard on mobile devices
+          inputMode="numeric"
+          pattern="[0-9]*"
         />
 
         <button className="btn btn-neutral mt-4 w-fit uppercase">Add</button>

@@ -38,12 +38,6 @@ export const addFood = async (req, res) => {
 export const getFoodsList = async (req, res) => {
   try {
     const foods = await foodModel.find().lean(); // lean() for better performance
-    if (!foods || foods.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No foods found",
-      });
-    }
     res.status(200).json({ success: true, data: foods });
   } catch (error) {
     console.error(error);

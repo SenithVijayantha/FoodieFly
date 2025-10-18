@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddProductPage = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -56,11 +57,13 @@ const AddProductPage = () => {
         setImage(null);
         // Reset the file input visually
         e.target.reset();
+        toast.success("Product added successfully!");
       } else {
         console.error(
           "Failed to submit form:",
           error.response ? error.response.data : error.message
         );
+        toast.error(response.data.message);
       }
     } catch (error) {}
   };
@@ -123,9 +126,6 @@ const AddProductPage = () => {
           value={productDetails.price}
           onChange={handlePriceInputChange}
           required
-          //   attributes to trigger numeric keyboard on mobile devices
-        //   inputMode="numeric"
-        //   pattern="[0-9]*"
         />
 
         <button className="btn btn-neutral mt-4 w-fit uppercase">Add</button>

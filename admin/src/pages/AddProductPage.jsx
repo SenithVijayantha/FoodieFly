@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const AddProductPage = () => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [image, setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
     name: "",
@@ -29,7 +32,7 @@ const AddProductPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -37,9 +40,29 @@ const AddProductPage = () => {
     formData.append("description", productDetails.description);
     formData.append("price", productDetails.price);
     formData.append("category", productDetails.category);
-    formData.append("description", productDetails.description);
     formData.append("image", image);
     // console.log(productDetails);
+
+    try {
+      const response = await axios.post(`${backendUrl}/food/add`, formData);
+
+      if (response.data.success) {
+        setProductDetails({
+          name: "",
+          description: "",
+          price: "",
+          category: "",
+        });
+        setImage(null);
+        // Reset the file input visually
+        e.target.reset();
+      } else {
+        console.error(
+          "Failed to submit form:",
+          error.response ? error.response.data : error.message
+        );
+      }
+    } catch (error) {}
   };
 
   return (
@@ -82,7 +105,7 @@ const AddProductPage = () => {
           onChange={handleProductDetails}
           required
         >
-          <option disabled={true}>Pick a color</option>
+          <option disabled={true}>Pick a category</option>
           <option value="Salad">Salad</option>
           <option value="Beverages">Beverages</option>
           <option value="Desserts">Desserts</option>
@@ -101,8 +124,8 @@ const AddProductPage = () => {
           onChange={handlePriceInputChange}
           required
           //   attributes to trigger numeric keyboard on mobile devices
-          inputMode="numeric"
-          pattern="[0-9]*"
+        //   inputMode="numeric"
+        //   pattern="[0-9]*"
         />
 
         <button className="btn btn-neutral mt-4 w-fit uppercase">Add</button>

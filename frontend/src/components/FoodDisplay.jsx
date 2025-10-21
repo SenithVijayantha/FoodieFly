@@ -3,7 +3,7 @@ import { StoreContext } from "../context/StoreContext";
 import FoodCard from "./FoodCard";
 
 const FoodDisplay = ({ category }) => {
-  const { food_list } = useContext(StoreContext);
+  const { foodList } = useContext(StoreContext);
 
   return (
     <div className="py-16">
@@ -16,7 +16,7 @@ const FoodDisplay = ({ category }) => {
           gridTemplateColumns: "repeat(auto-fit, 336px)",
         }}
       >
-        {food_list.map((item, index) => {
+        {foodList.map((item, index) => {
           if (category === "All" || category === item.category) {
             // If selected category is equal to category of the item only the that item will return
             return (

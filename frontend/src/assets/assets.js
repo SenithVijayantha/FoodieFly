@@ -37,7 +37,7 @@ export const menu_list = [
   },
 ];
 
-export const food_list = [
+export const foodList = [
   // --- Salads ---
     {
       _id: "1",

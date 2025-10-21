@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 const CartPage = () => {
   const {
     cartItems,
-    food_list,
+    foodList,
     removeFromCart,
     getTotalCartItemsPrice,
     cartItemsCount,
@@ -32,7 +32,7 @@ const CartPage = () => {
               </tr>
             </thead>
             <tbody>
-              {food_list.map((item, index) => {
+              {foodList.map((item, index) => {
                 if (cartItems[item._id] > 0) {
                   return (
                     <tr className="text-center" key={index}>

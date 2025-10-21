@@ -1,15 +1,17 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
-import { food_list } from "../assets/assets";
+import { foodList } from "../assets/assets";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
   const url = import.meta.env.VITE_BACKEND_URL;
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [cartItemsCount, setCartItemsCount] = useState(0);
+
   let deliveryFee = 0;
 
   if (cartItemsCount > 0) {
@@ -36,7 +38,7 @@ const StoreContextProvider = ({ children }) => {
 
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = food_list.find((product) => product._id === item);
+        let itemInfo = foodList.find((product) => product._id === item);
         totalAmount += itemInfo.price * cartItems[item];
       }
     }
@@ -68,7 +70,7 @@ const StoreContextProvider = ({ children }) => {
   // }, [cartItems]);
 
   const value = {
-    food_list,
+    foodList,
     cartItems,
     addToCart,
     removeFromCart,

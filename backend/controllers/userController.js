@@ -96,3 +96,16 @@ export const signUpUser = async (req, res) => {
     });
   }
 };
+
+// sign out
+export const signOutUser = (req, res) => {
+  res.clearCookie("token");
+  return res.json({ success: true });
+};
+
+// authenticate user
+export const authenticateUser = (req, res) => {
+  if (req.user.userId) {
+    return res.json({ success: true });
+  }
+};

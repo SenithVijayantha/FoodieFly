@@ -1,48 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+import { StoreContext } from "../context/StoreContext";
 
 const LoginForm = () => {
+  const { url, checkUserAuthStats } = useContext(StoreContext);
+
+  const [showErrorMsg, setShowErrorMsg] = useState(false);
   const [currentState, setCurrentState] = useState("Sign Up");
   const [userCredentials, setUserCredentials] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
-  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  // useEffect(() => {
+  //   checkUserAuthStats();
+  // }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (currentState === "Sign Up" && isDataSubmitted === false) {
-      setIsDataSubmitted(true);
-      return;
+    // login(currentState === "Sign Up" ? "signup" : "login", userCredentials);
+    // console.log(userCredentials);
+    let newUrl = url;
+    if (currentState === "Login") {
+      newUrl += "/api/user/signin";
+    } else {
+      newUrl += "/api/user/signup";
     }
 
-    // login(currentState === "Sign Up" ? "signup" : "login", userCredentials);
+    try {
+      const response = await axios.post(newUrl, userCredentials, {
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        window.location.reload();
+        // toast.success(response.data.message);
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        // toast.error(error.response.data.message);
+        console.error(error.response.data.message);
+        setShowErrorMsg(true);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+      console.error(error);
+    }
   };
 
   return (
     <dialog id="my_modal_2" className="modal">
-      <div className="hero bg-base-200/30 backdrop-blur-md min-h-screen">
+      <div className="hero bg-base-200/30  min-h-screen">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-2xl font-semibold ">{currentState}</h2>{" "}
-              {isDataSubmitted && (
-                <ArrowLeft
-                  onClick={() => setIsDataSubmitted(false)}
-                  className="cursor-pointer btn btn-sm p-1 btn-circle"
-                />
-              )}
             </div>
-            <form action="" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <fieldset className="fieldset">
-                {currentState === "Sign Up" && isDataSubmitted === false && (
+                {currentState === "Sign Up" && (
                   <>
                     <label className="label">Full Name</label>
                     <input
                       type="text"
-                      name="fullName"
-                      value={userCredentials.fullName}
+                      name="name"
+                      value={userCredentials.name}
                       className="input"
                       placeholder="Full Name"
                       required
@@ -55,45 +80,45 @@ const LoginForm = () => {
                     />
                   </>
                 )}
-                {isDataSubmitted === false && (
-                  <>
-                    <label className="label">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={userCredentials.email}
-                      className="input"
-                      placeholder="Email"
-                      required
-                      onChange={(e) =>
-                        setUserCredentials({
-                          ...userCredentials,
-                          [e.target.name]: e.target.value,
-                        })
-                      }
-                    />
-                  </>
+                <>
+                  <label className="label">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={userCredentials.email}
+                    className="input"
+                    placeholder="Email"
+                    required
+                    onChange={(e) =>
+                      setUserCredentials({
+                        ...userCredentials,
+                        [e.target.name]: e.target.value,
+                      })
+                    }
+                  />
+                </>
+
+                <label className="label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={userCredentials.password}
+                  className="input"
+                  placeholder="Password"
+                  required
+                  onChange={(e) =>
+                    setUserCredentials({
+                      ...userCredentials,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                />
+                {showErrorMsg && (
+                  <label className="label text-red-600">
+                    Incorrect email or password
+                  </label>
                 )}
-                {isDataSubmitted === false && (
-                  <>
-                    <label className="label">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={userCredentials.password}
-                      className="input"
-                      placeholder="Password"
-                      required
-                      onChange={(e) =>
-                        setUserCredentials({
-                          ...userCredentials,
-                          [e.target.name]: e.target.value,
-                        })
-                      }
-                    />
-                  </>
-                )}
-                {currentState === "Sign Up" && isDataSubmitted === false && (
+                {currentState === "Sign Up" && (
                   <div className="mt-4">
                     <fieldset>
                       <label className="label">
@@ -108,27 +133,12 @@ const LoginForm = () => {
                     </fieldset>
                   </div>
                 )}
-                {currentState === "Sign Up" && isDataSubmitted === true && (
-                  <textarea
-                    name="bio"
-                    value={userCredentials.bio}
-                    className="textarea w-full resize-none"
-                    placeholder="Bio"
-                    onChange={(e) =>
-                      setUserCredentials({
-                        ...userCredentials,
-                        [e.target.name]: e.target.value,
-                      })
-                    }
-                  ></textarea>
-                )}
                 {currentState === "Sign Up" ? (
                   <p>
                     Already have an account?{" "}
                     <span
                       onClick={() => {
                         setCurrentState("Login");
-                        setIsDataSubmitted(false);
                       }}
                       className="text-accent cursor-pointer"
                     >
@@ -146,7 +156,7 @@ const LoginForm = () => {
                     </span>
                   </p>
                 )}
-                <button className="btn btn-primary mt-4">
+                <button type="submit" className="btn btn-primary mt-4">
                   {currentState === "Sign Up" ? "Create Account" : "Login Now"}
                 </button>
               </fieldset>

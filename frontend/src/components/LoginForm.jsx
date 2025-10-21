@@ -15,9 +15,9 @@ const LoginForm = () => {
     password: "",
   });
 
-  // useEffect(() => {
-  //   checkUserAuthStats();
-  // }, []);
+  useEffect(() => {
+    checkUserAuthStats();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

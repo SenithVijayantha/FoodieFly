@@ -1,12 +1,14 @@
 import React from "react";
-import ThemeToggler from "./ThemeToggler";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
 import { useContext } from "react";
+
+import ThemeToggler from "./ThemeToggler";
 import { StoreContext } from "../context/StoreContext";
+import ProfileAvatar from "./ProfileAvatar.jsx";
 
 const Navbar = () => {
-  const { cartItemsCount } = useContext(StoreContext);
+  const { cartItemsCount, isAuthenticated } = useContext(StoreContext);
 
   return (
     <div className="max-w-[1920px] sticky top-0 z-10 navbar bg-primary shadow-sm">
@@ -80,12 +82,19 @@ const Navbar = () => {
           )}
         </Link>
         <ThemeToggler />
-        <button
-          onClick={() => document.getElementById("my_modal_2").showModal()}
-          className="btn btn-outline"
-        >
-          Sign in
-        </button>
+        {!isAuthenticated ? (
+          <button
+            onClick={() => document.getElementById("my_modal_2").showModal()}
+            className="btn btn-outline"
+          >
+            Sign in
+          </button>
+        ) : (
+          // <button className="btn btn-ghost btn-circle avatar">
+          //   <img width={30} src={icons.avatar} alt="" />
+          // </button>
+          <ProfileAvatar />
+        )}
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export const addFood = async (req, res) => {
     await food.save();
     res.status(201).json({ success: true, message: "Item added successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error in addFood", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const AddProductPage = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
+const AddProductPage = ({ backendUrl }) => {
   const [image, setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
     name: "",
     description: "",
     price: "",
-    category: "",
+    category: "Salad",
   });
 
   const handleProductDetails = (e) => {
@@ -63,7 +61,10 @@ const AddProductPage = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Failed to submit form:", error.response ? error.response.data : error.message);
+      console.error(
+        "Failed to submit form:",
+        error.response ? error.response.data : error.message
+      );
       toast.error("Failed to add product. Please try again.");
     }
   };
@@ -108,7 +109,6 @@ const AddProductPage = () => {
           onChange={handleProductDetails}
           required
         >
-          <option disabled={true}>Pick a category</option>
           <option value="Salad">Salad</option>
           <option value="Beverages">Beverages</option>
           <option value="Desserts">Desserts</option>

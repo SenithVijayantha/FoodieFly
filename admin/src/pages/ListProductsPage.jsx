@@ -3,8 +3,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { X } from "lucide-react";
 
-const ListProductsPage = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const ListProductsPage = ({ backendUrl }) => {
   const [foodList, setFoodList] = useState([]);
 
   const fetchList = async () => {
@@ -31,7 +30,7 @@ const ListProductsPage = () => {
     const response = await axios.delete(`${backendUrl}/api/food/remove`, {
       data: { id: foodItemId },
     });
-    await fetchList();
+    await fetchList(); // trigger an UI update
     if (response.data.success) {
       toast.success(response.data.message);
     } else {
@@ -45,44 +44,52 @@ const ListProductsPage = () => {
 
   return (
     <div className="overflow-x-auto pl-16">
-      {foodList.length !== 0 && <table className="table">
-        {/* head */}
-        <thead>
-          <tr className="text-center">
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {foodList.map((item, index) => {
-            return (
-              <tr key={index} className="text-center">
-                <td>
-                  <img
-                    className="w-30 h-20 object-cover rounded-lg mx-auto"
-                    src={`${backendUrl}/images/${item.image}`}
-                    alt=""
-                  />
-                </td>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>${item.price}</td>
-                <td>
-                  <button
-                    className="btn btn-circle btn-primary btn-outline btn-xs"
-                    onClick={() => removeFoodItem(item._id)}
-                  >
-                    <X width={15} />
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>}
+      {foodList.length !== 0 ? (
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr className="text-center">
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {foodList.map((item, index) => {
+              return (
+                <tr key={index} className="text-center">
+                  <td>
+                    <img
+                      className="w-30 h-20 object-cover rounded-lg mx-auto"
+                      src={`${backendUrl}/images/${item.image}`}
+                      alt=""
+                    />
+                  </td>
+                  <td>{item.name}</td>
+                  <td>{item.category}</td>
+                  <td>${item.price}</td>
+                  <td>
+                    <button
+                      className="btn btn-circle btn-primary btn-outline btn-xs"
+                      onClick={() => removeFoodItem(item._id)}
+                    >
+                      <X width={15} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <div className="flex justify-center items-center h-screen">
+          <div className="bg-base-300 rounded-md p-5">
+            Please add one or more items to view!
+          </div>
+        </div>
+      )}
     </div>
   );
 };

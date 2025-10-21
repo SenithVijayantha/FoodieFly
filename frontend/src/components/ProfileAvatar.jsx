@@ -33,6 +33,7 @@ const ProfileAvatar = () => {
         withCredentials: true,
       });
       if (response.data.success) {
+        toast.success("Signed out");
         setIsAuthenticated(false);
       }
     } catch (error) {
@@ -77,7 +78,7 @@ const ProfileAvatar = () => {
         {/* The dropdown menu, conditionally rendered with a smooth transition */}
         {isOpen && (
           <div
-            className="absolute right-0 z-10 mt-4 w-30 origin-top-right rounded-md bg-primary py-1 shadow-2xl focus:outline-none transition ease-out duration-100 transform opacity-100 scale-100 hover:bg-primary/50"
+            className="absolute right-0 z-10 mt-4 w-30 origin-top-right rounded-md bg-primary py-1 shadow-2xl focus:outline-none transition ease-out duration-100 transform opacity-100 scale-100"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu-button"
@@ -86,12 +87,22 @@ const ProfileAvatar = () => {
             {/* Menu items */}
             <button
               href="#"
-              className="block px-4 py-2 text-sm font-medium cursor-pointer"
+              className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
               role="menuitem"
               tabIndex="-1"
               onClick={handleSignOut}
             >
-              Logout
+              Sign Out
+            </button>
+
+            <button
+              href="#"
+              className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
+              role="menuitem"
+              tabIndex="-1"
+              onClick={handleSignOut}
+            >
+              Orders
             </button>
           </div>
         )}

@@ -5,6 +5,7 @@ import { food_list } from "../assets/assets";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
+  const url = import.meta.env.VITE_BACKEND_URL;
   const [cartItems, setCartItems] = useState({});
   const [cartItemsCount, setCartItemsCount] = useState(0);
   let deliveryFee = 0;
@@ -53,6 +54,7 @@ const StoreContextProvider = ({ children }) => {
     getTotalCartItemsPrice,
     cartItemsCount,
     deliveryFee,
+    url,
   };
 
   return (

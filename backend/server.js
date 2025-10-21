@@ -5,6 +5,7 @@ import cors from "cors";
 
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.get("/api/status", (req, res) => {
 
 // endpoints
 app.use("/api/food", foodRouter);
+app.use("/api/user", userRouter);
 app.use("/images", express.static("uploads"));
 
 const server = http.createServer(app);

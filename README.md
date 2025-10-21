@@ -15,6 +15,8 @@ Frontend (Customer App)
 - [ ] Order History: Create a page for users to view their past orders.
 - [ ] Payment Gateway: Integrate a payment gateway.
 - [ ] UI Polishing: Add loading spinners, toast notifications for user feedback, and form validation messages.
+- [ ] Light Mode: Fix the color contrasts.
+- [ ] Sign out: Add a logout function.
 
 Admin Panel
 

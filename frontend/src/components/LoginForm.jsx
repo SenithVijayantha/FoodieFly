@@ -53,7 +53,7 @@ const LoginForm = () => {
 
   return (
     <dialog id="my_modal_2" className="modal">
-      <div className="hero bg-base-200/30  min-h-screen">
+      <div className="hero bg-base-200/30 backdrop-blur-md min-h-screen">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
             <div className="flex items-center justify-between mb-2">

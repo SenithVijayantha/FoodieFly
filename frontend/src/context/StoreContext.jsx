@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 import { food_list } from "../assets/assets";
 
@@ -6,6 +7,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
   const url = import.meta.env.VITE_BACKEND_URL;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [cartItemsCount, setCartItemsCount] = useState(0);
   let deliveryFee = 0;
@@ -42,6 +44,25 @@ const StoreContextProvider = ({ children }) => {
     return totalAmount;
   };
 
+  // Check whether the user is authenticated or not
+  const checkUserAuthStats = async () => {
+    try {
+      const response = await axios.get(`${url}/api/user/auth/status`, {
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        setIsAuthenticated(true);
+        console.log(response.data.success);
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        console.error(error.response.data.message);
+      }
+      console.error(error);
+    }
+  };
+
   // useEffect(() => {
   //   console.log(cartItems);
   // }, [cartItems]);
@@ -55,6 +76,9 @@ const StoreContextProvider = ({ children }) => {
     cartItemsCount,
     deliveryFee,
     url,
+    checkUserAuthStats,
+    isAuthenticated,
+    setIsAuthenticated,
   };
 
   return (

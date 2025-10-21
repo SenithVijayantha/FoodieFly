@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 
 import userModel from "../models/userModel.js";
+import { setAuthCookie } from "../utils/jwt.js";
 
 // sing in
 export const signInUser = async (req, res) => {};
@@ -40,11 +41,16 @@ export const signUpUser = async (req, res) => {
     );
 
     const newUser = new userModel({ name, email, password: hashedPassword });
-    const savedUser = await newUser.save();
+    const savedUser = await newUser.save({});
+    const { password: _, ...userData } = savedUser._doc;
 
+    if (savedUser) {
+      const payload = { userId: savedUser._id };
+      setAuthCookie(res, payload);
+    }
     return res.status(201).json({
       success: true,
-      data: savedUser,
+      data: userData,
       message: "User created successfully",
     });
   } catch (error) {

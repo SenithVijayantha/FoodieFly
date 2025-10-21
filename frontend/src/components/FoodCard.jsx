@@ -3,12 +3,12 @@ import { Minus, Plus } from "lucide-react";
 import { StoreContext } from "../context/StoreContext";
 
 const FoodCard = ({ id, name, price, description, image }) => {
-  const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
+  const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
 
   return (
     <div className="card bg-base-300 w-84 shadow-sm">
       <figure className="">
-        <img src={image} alt="food" className=" w-full h-60 object-cover" />
+        <img src={`${url}/images/${image}`} alt="food" className=" w-full h-60 object-cover" />
       </figure>
       <div className="card-body">
         <h2 className="card-title ">{name}</h2>

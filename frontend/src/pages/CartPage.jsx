@@ -12,6 +12,7 @@ const CartPage = () => {
     getTotalCartItemsPrice,
     cartItemsCount,
     deliveryFee,
+    url
   } = useContext(StoreContext);
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ const CartPage = () => {
                       <th>
                         <img
                           className="w-30 h-20 object-cover rounded-lg mx-auto"
-                          src={item.image}
+                          src={`${url}/images/${item.image}`}
                           alt=""
                         />
                       </th>

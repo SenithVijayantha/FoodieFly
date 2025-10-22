@@ -85,4 +85,25 @@ export const removeFromCart = async (req, res) => {
 };
 
 // fetch user cart data
-export const getAllCartItems = async (req, res) => {};
+export const getAllCartItems = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing userId" });
+    }
+
+    const userData = await userModel.findById(userId);
+    const cartData = userData.cartData || {};
+
+    return res.status(200).json({ success: true, data: cartData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while trying to remove form the cart",
+    });
+  }
+};

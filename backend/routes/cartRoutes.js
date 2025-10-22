@@ -5,11 +5,12 @@ import {
   removeFromCart,
   getAllCartItems,
 } from "../controllers/cartController.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const cartRouter = express.Router();
 
-cartRouter.post("/add", addToCart);
-cartRouter.post("/remove", removeFromCart);
-cartRouter.get("/get", getAllCartItems);
+cartRouter.post("/add", authenticate, addToCart);
+cartRouter.post("/remove", authenticate, removeFromCart);
+cartRouter.get("/get", authenticate, getAllCartItems);
 
 export default cartRouter;

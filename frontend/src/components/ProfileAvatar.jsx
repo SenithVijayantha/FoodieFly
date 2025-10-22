@@ -29,7 +29,7 @@ const ProfileAvatar = () => {
 
   const handleSignOut = async () => {
     try {
-      const response = await axios.post(`${url}/api/user/signout`, {
+      const response = await axios.post(`${url}/api/user/signout`, {}, {
         withCredentials: true,
       });
       if (response.data.success) {
@@ -40,7 +40,6 @@ const ProfileAvatar = () => {
       if (error.response && error.response.data) {
         // toast.error(error.response.data.message);
         console.error(error.response.data.message);
-        setShowErrorMsg(true);
       } else {
         toast.error("Something went wrong. Please try again.");
       }

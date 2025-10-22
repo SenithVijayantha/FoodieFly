@@ -99,7 +99,14 @@ export const signUpUser = async (req, res) => {
 
 // sign out
 export const signOutUser = (req, res) => {
-  res.clearCookie("token");
+  // console.log("signOutUser function executed");
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    expires: new Date(0), // Set expiration to a past date
+    path: "/",
+  });
   return res.json({ success: true });
 };
 

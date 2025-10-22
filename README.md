@@ -1,4 +1,4 @@
-TODO List
+## TODO List
 
 Backend & API
 
@@ -17,6 +17,7 @@ Frontend (Customer App)
 - [ ] UI Polishing: Add loading spinners, toast notifications for user feedback, and form validation messages.
 - [ ] Light Mode: Fix the color contrasts.
 - [ ] Sign out: Add a logout function.
+- [ ] Fix Footer: Footer should stay at bottom
 
 Admin Panel
 

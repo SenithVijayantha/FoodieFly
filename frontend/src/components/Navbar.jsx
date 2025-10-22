@@ -90,9 +90,6 @@ const Navbar = () => {
             Sign in
           </button>
         ) : (
-          // <button className="btn btn-ghost btn-circle avatar">
-          //   <img width={30} src={icons.avatar} alt="" />
-          // </button>
           <ProfileAvatar />
         )}
       </div>

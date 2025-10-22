@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 // import { foodList } from "../assets/assets";
 
@@ -26,19 +27,77 @@ const StoreContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
-  const addToCart = (itemId) => {
+  const loadCartData = async () => {
+    const response = await axios.get(`${url}/api/cart/get`, {
+      withCredentials: true,
+    });
+    setCartItems(response.data.data);
+  };
+
+  const addToCart = async (itemId) => {
     setCartItems((prev) => {
       if (!prev[itemId]) return { ...prev, [itemId]: 1 };
       return { ...prev, [itemId]: prev[itemId] + 1 };
     });
-    setCartItemsCount(cartItemsCount + 1);
+
+    try {
+      const response = await axios.post(
+        `${url}/api/cart/add`,
+        { itemId },
+        {
+          withCredentials: true,
+        }
+      );
+      await getCartItemsCount();
+      toast.success(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      }
+      console.error(error);
+    }
   };
 
-  const removeFromCart = (itemId) => {
+  const getCartItemsCount = async () => {
+    try {
+      const response = await axios.get(`${url}/api/cart/get`, {
+        withCredentials: true,
+      });
+
+      const itemCount = Object.keys(response.data.data).length;
+
+      if (itemCount !== 0) {
+        setCartItemsCount(itemCount);
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        console.error(error.response.data.message);
+      }
+      console.error(error);
+    }
+  };
+
+  const removeFromCart = async (itemId) => {
     // Getting minus number for count hasn't handled here because the frontend
     // will only display the decrement button when the count is higher than zero.
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-    setCartItemsCount(cartItemsCount - 1);
+
+    try {
+      const response = await axios.post(
+        `${url}/api/cart/remove`,
+        { itemId },
+        {
+          withCredentials: true,
+        }
+      );
+      await getCartItemsCount();
+      toast.success(response.data.message);
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      }
+      console.error(error);
+    }
   };
 
   const getTotalCartItemsPrice = () => {
@@ -47,7 +106,11 @@ const StoreContextProvider = ({ children }) => {
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         let itemInfo = foodList.find((product) => product._id === item);
+        if (itemInfo) {
         totalAmount += itemInfo.price * cartItems[item];
+      } else {
+        console.warn(`Item with id ${item} not found in foodList`);
+      }
       }
     }
 
@@ -73,9 +136,15 @@ const StoreContextProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   console.log(cartItems);
+  // }, [cartItems]);
+
   useEffect(() => {
     // console.log(cartItems);
     fetchFoodList();
+    getCartItemsCount();
+    loadCartData();
   }, []);
 
   const value = {

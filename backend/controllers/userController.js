@@ -112,7 +112,9 @@ export const signOutUser = (req, res) => {
 
 // authenticate user
 export const authenticateUser = (req, res) => {
-  if (req.body.userId) {
-    return res.json({ success: true });
+  if (req.user.userId) {
+    return res.json({ success: true, message: "Authorized" });
+  } else {
+    return res.json({ success: false, message: "Not authorized" });
   }
 };

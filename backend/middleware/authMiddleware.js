@@ -8,8 +8,8 @@ export const authenticate = async (req, res, next) => {
   try {
     const secret = process.env.JWT_SECRET;
     const decoded = jwt.verify(token, secret);
-    req.body.userId = decoded.userId;
-    // console.log(req.body);
+    req.user = { userId: decoded.userId };
+    console.log(req.user);
     next();
   } catch (error) {
     return res

@@ -8,7 +8,7 @@ import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
-import { authenticate } from "./middleware/authMiddleware.js";
+import orderRouter from "./routes/orderRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -32,7 +32,8 @@ app.get("/api/status", (req, res) => {
 // endpoints
 app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
-app.use("/api/cart", authenticate, cartRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
 app.use("/images", express.static("uploads"));
 
 const server = http.createServer(app);

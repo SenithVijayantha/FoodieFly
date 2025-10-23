@@ -67,7 +67,7 @@ const StoreContextProvider = ({ children }) => {
       const itemCount = Object.keys(response.data.data).length;
 
       if (itemCount !== 0) {
-        setCartItemsCount(itemCount);
+      setCartItemsCount(itemCount);
       }
     } catch (error) {
       if (error.response && error.response.data) {

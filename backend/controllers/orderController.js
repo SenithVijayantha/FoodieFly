@@ -98,3 +98,18 @@ export const listAllOrders = async (req, res) => {
     res.json({ success: false, message: "Error while fetching order list" });
   }
 };
+
+// Update order status
+export const updateOrderStatus = async (req, res) => {
+  try {
+    await orderModel.findByIdAndUpdate(req.body.orderId, {
+      status: req.body.status,
+    });
+    return res.status(200).json({ success: true, message: "Status updated" });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error in updating order status" });
+  }
+};

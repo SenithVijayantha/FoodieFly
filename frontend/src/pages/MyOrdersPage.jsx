@@ -16,7 +16,7 @@ const MyOrdersPage = () => {
       { withCredentials: true }
     );
     setData(response.data.data);
-    console.log(response.data.data);
+    // console.log(response.data.data);
   };
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const MyOrdersPage = () => {
               <tr key={index}>
                 <td className="w-[2rem]">
                   <div className="flex justify-between bg-accent/70 p-1 rounded-md w-fit">
-                    <Package width={20} height={20}/>
+                    <Package width={20} height={20} />
                   </div>
                 </td>
                 <td className="">
@@ -64,7 +64,10 @@ const MyOrdersPage = () => {
                   </div>
                 </td>
                 <td className="">
-                  <button className="btn btn-outline btn-sm btn-accent">
+                  <button
+                    className="btn btn-outline btn-sm btn-accent"
+                    onClick={fetchOrders}
+                  >
                     Track
                   </button>
                 </td>

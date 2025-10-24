@@ -99,7 +99,7 @@ const ProfileAvatar = () => {
               className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
               role="menuitem"
               tabIndex="-1"
-              onClick={handleSignOut}
+              // onClick={handleSignOut}
             >
               Orders
             </button>

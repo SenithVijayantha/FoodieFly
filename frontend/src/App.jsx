@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
 import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm";
+import VerifyPayment from "./pages/VerifyPayment";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order" element={<PlaceOrderPage />} />
+          <Route path="/verify" element={<VerifyPayment />} />
         </Routes>
         <Footer />
       </div>

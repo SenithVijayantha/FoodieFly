@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 
 import Sidebar from "./components/Sidebar";
 import AddProductPage from "./pages/AddProductPage";
@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div>
-      <ToastContainer />
+      <Toaster />
       <Sidebar />
       <Routes>
         <Route

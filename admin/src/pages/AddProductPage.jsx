@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const AddProductPage = ({ backendUrl }) => {
   const [image, setImage] = useState(null);

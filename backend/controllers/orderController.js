@@ -87,3 +87,14 @@ export const userOrders = async (req, res) => {
     });
   }
 };
+
+// List all orders for admin panel
+export const listAllOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.find({});
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error while fetching order list" });
+  }
+};

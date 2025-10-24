@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 import { icons } from "../assets/assets.js";
 import { StoreContext } from "../context/StoreContext.jsx";
@@ -27,11 +28,17 @@ const ProfileAvatar = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const handleSignOut = async () => {
     try {
-      const response = await axios.post(`${url}/api/user/signout`, {}, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${url}/api/user/signout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       if (response.data.success) {
         toast.success("Signed out");
         setIsAuthenticated(false);
@@ -99,7 +106,7 @@ const ProfileAvatar = () => {
               className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
               role="menuitem"
               tabIndex="-1"
-              // onClick={handleSignOut}
+              onClick={() => navigate("/myorders")}
             >
               Orders
             </button>

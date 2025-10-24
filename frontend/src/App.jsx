@@ -6,9 +6,9 @@ import Navbar from "./components/Navbar";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
 import PlaceOrderPage from "./pages/PlaceOrderPage";
-import Footer from "./components/Footer";
 import LoginForm from "./components/LoginForm";
 import VerifyPayment from "./pages/VerifyPayment";
+import MyOrdersPage from "./pages/MyOrdersPage";
 
 const App = () => {
   return (
@@ -22,8 +22,8 @@ const App = () => {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/order" element={<PlaceOrderPage />} />
           <Route path="/verify" element={<VerifyPayment />} />
+          <Route path="/myorders" element={<MyOrdersPage />} />
         </Routes>
-        <Footer />
       </div>
     </>
   );

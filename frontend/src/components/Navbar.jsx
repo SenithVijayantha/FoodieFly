@@ -81,7 +81,7 @@ const Navbar = () => {
             <></>
           )}
         </Link>
-        <ThemeToggler />
+        {/* <ThemeToggler /> */}
         {!isAuthenticated ? (
           <button
             onClick={() => document.getElementById("my_modal_2").showModal()}

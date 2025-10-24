@@ -9,7 +9,7 @@ const ListProductsPage = ({ backendUrl }) => {
   const fetchList = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/food/list`);
-      console.log(response.data.data);
+      // console.log(response.data.data);
 
       if (response.data.success) {
         setFoodList(response.data.data);

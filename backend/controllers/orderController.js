@@ -51,6 +51,24 @@ export const placeOrder = async (req, res) => {
     return res.status(200).json({ success: true, session_url: session.url });
   } catch (error) {
     console.error("Error placing order:", error);
-    return res.status(500).json({ success: false, message: "Failed to place order" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Failed to place order" });
+  }
+};
+
+export const verifyOrder = async (req, res) => {
+  const { orderId, success } = req.body;
+  try {
+    if (success == "true") {
+      await orderModel.findByIdAndUpdate(orderId, { payment: true });
+      res.json({ success: true, message: "Paid" });
+    } else {
+      await orderModel.findByIdAndDelete(orderId);
+      res.json({ success: false, message: "Not paid" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: "Error in verifyOrder controller" });
   }
 };

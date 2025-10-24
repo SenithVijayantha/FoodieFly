@@ -57,6 +57,7 @@ export const placeOrder = async (req, res) => {
   }
 };
 
+// verify success of order
 export const verifyOrder = async (req, res) => {
   const { orderId, success } = req.body;
   try {
@@ -70,5 +71,19 @@ export const verifyOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Error in verifyOrder controller" });
+  }
+};
+
+// display orders on user's frontend
+export const userOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.find({ userId: req.user.userId });
+    res.status(200).json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while trying to display orders",
+    });
   }
 };

@@ -8,18 +8,28 @@ const OrdersPage = ({ backendUrl }) => {
 
   const fetchAllOrders = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/order/list`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(`${backendUrl}/api/order/list`);
 
       if (response.data.success) {
         setOrders(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       } else {
         toast.error("Error fetching order list");
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleOrderStatusChange = async (e, orderId) => {
+    // console.log(orderId);
+    const response = await axios.post(`${backendUrl}/api/order/update-status`, {
+      orderId,
+      status: e.target.value,
+    });
+
+    if (response.data.success) {
+      await fetchAllOrders();
     }
   };
 
@@ -105,13 +115,13 @@ const OrdersPage = ({ backendUrl }) => {
                   <div className="p-2">
                     <div className="flex  font-semibold">
                       <select
-                        defaultValue="Pick a color"
                         className="select text-accent uppercase text-xs w-fit"
+                        onChange={(e) => handleOrderStatusChange(e, order._id)}
+                        value={order.status}
                       >
-                        <option disabled={true}>Status</option>
-                        <option>Processing</option>
-                        <option>Shipped</option>
-                        <option>Delivered</option>
+                        <option value={"Processing"}>Processing</option>
+                        <option value={"Shipped"}>Shipped</option>
+                        <option value={"Delivered"}>Delivered</option>
                       </select>
                     </div>
                   </div>

@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL, process.env.BACKEND_URL],
+    origin: [process.env.FRONTEND_URL, process.env.ADMIN_URL],
     credentials: true,
   })
 );

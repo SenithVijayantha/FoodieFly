@@ -1,12 +1,15 @@
 import React from "react";
+import { header_bg } from "../assets/assets";
 
 const Header = () => {
   return (
-    <div id="home" className="hero min-h-screen">
-      <div className="hero-content text-center">
-        <div className="max-w-md sm:max-w-3xl lg:max-w-7xl md:max-w-4xl">
-          <h1 className="text-4xl sm:text-6xl sm:leading-none lg:text-9xl md:text-7xl md:tracking-light md:leading-none lg:leading-none lg:tracking-tight font-bold tracking-wide leading-12">
-            Delicious Meals, Delivered Fast!
+    <div id="home" className="relative min-h-screen">
+      <img src={header_bg} className="w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center">
+        <div className="text-center text-white">
+          <h1 className="text-5xl sm:text-6xl lg:text-9xl font-bold animate-slide-up">
+            Delicious Meals,
+            <br /> Delivered Fast!
           </h1>
           <p className="py-6 px-12 max-w-md mx-auto">
             Craving something tasty? Get your favorite dishes from local

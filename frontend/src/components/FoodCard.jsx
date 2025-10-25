@@ -6,7 +6,7 @@ const FoodCard = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
 
   return (
-    <div className="card bg-base-300 w-84 shadow-sm">
+    <div className="card bg-base-300 w-84 shadow-sm transition-transform hover:scale-105">
       <figure className="">
         <img src={`${url}/images/${image}`} alt="food" className=" w-full h-60 object-cover" />
       </figure>

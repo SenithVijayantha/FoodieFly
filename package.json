@@ -1,0 +1,24 @@
+{
+  "name": "food-delivery-app",
+  "version": "1.0.0",
+  "description": "A full-stack food delivery application with a customer frontend, an admin panel, and a backend API. This repository contains the code and instructions to run the app locally, configure environment variables, run tests, and prepare for deployment.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm run server\" \"cd frontend && npm run dev\" \"cd admin && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SenithVijayantha/food-delivery-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SenithVijayantha/food-delivery-app/issues"
+  },
+  "homepage": "https://github.com/SenithVijayantha/food-delivery-app#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

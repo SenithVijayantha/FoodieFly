@@ -108,6 +108,7 @@ const StoreContextProvider = ({ children }) => {
         let itemInfo = foodList.find((product) => product._id === item);
         if (itemInfo) {
         totalAmount += itemInfo.price * cartItems[item];
+        totalAmount = Number(totalAmount.toFixed(2));
       } else {
         console.warn(`Item with id ${item} not found in foodList`);
       }

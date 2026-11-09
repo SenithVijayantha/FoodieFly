@@ -1,15 +1,22 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
+import type { FormEvent } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import { StoreContext } from "../context/StoreContext";
+
+interface UserCredentials {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const LoginForm = () => {
   const { url, checkUserAuthStats } = useContext(StoreContext);
 
   const [showErrorMsg, setShowErrorMsg] = useState(false);
   const [currentState, setCurrentState] = useState("Sign Up");
-  const [userCredentials, setUserCredentials] = useState({
+  const [userCredentials, setUserCredentials] = useState<UserCredentials>({
     name: "",
     email: "",
     password: "",
@@ -19,7 +26,7 @@ const LoginForm = () => {
     checkUserAuthStats();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // login(currentState === "Sign Up" ? "signup" : "login", userCredentials);
     // console.log(userCredentials);
@@ -40,7 +47,7 @@ const LoginForm = () => {
         // toast.success(response.data.message);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         // toast.error(error.response.data.message);
         console.error(error.response.data.message);
         setShowErrorMsg(true);

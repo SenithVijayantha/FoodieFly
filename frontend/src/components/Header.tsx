@@ -1,4 +1,3 @@
-import React from "react";
 import { header_bg } from "../assets/assets";
 
 const Header = () => {

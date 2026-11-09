@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SunMedium, Moon } from "lucide-react";
 
-const getInitialTheme = () => {
+type Theme = "light" | "dark";
+
+const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined" && window.localStorage) {
     const storedTheme = window.localStorage.getItem("theme");
     if (typeof storedTheme === "string" && (storedTheme === "light" || storedTheme === "dark")) {
@@ -19,7 +21,7 @@ const getInitialTheme = () => {
 
 
 const ThemeToggler = () => {
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);

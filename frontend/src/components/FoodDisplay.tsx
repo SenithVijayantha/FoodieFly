@@ -1,8 +1,12 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { StoreContext } from "../context/StoreContext";
 import FoodCard from "./FoodCard";
 
-const FoodDisplay = ({ category }) => {
+interface FoodDisplayProps {
+  category: string;
+}
+
+const FoodDisplay = ({ category }: FoodDisplayProps) => {
   const { foodList } = useContext(StoreContext);
 
   return (

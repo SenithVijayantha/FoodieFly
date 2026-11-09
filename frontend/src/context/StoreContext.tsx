@@ -1,18 +1,48 @@
 import { createContext, useEffect, useState } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
 // import { foodList } from "../assets/assets";
 
-export const StoreContext = createContext(null);
+export interface FoodItem {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  category: string;
+}
 
-const StoreContextProvider = ({ children }) => {
-  const url = import.meta.env.VITE_BACKEND_URL;
+export type CartItems = Record<string, number>;
+
+export interface StoreContextValue {
+  foodList: FoodItem[];
+  cartItems: CartItems;
+  addToCart: (itemId: string) => Promise<void>;
+  removeFromCart: (itemId: string) => Promise<void>;
+  getTotalCartItemsPrice: () => number;
+  cartItemsCount: number;
+  deliveryFee: number;
+  url: string;
+  checkUserAuthStats: () => Promise<void>;
+  isAuthenticated: boolean;
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+}
+
+export const StoreContext = createContext<StoreContextValue>(null!);
+
+interface StoreContextProviderProps {
+  children: ReactNode;
+}
+
+const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
+  const url: string = import.meta.env.VITE_BACKEND_URL;
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState<CartItems>({});
   const [cartItemsCount, setCartItemsCount] = useState(0);
-  const [foodList, setFoodList] = useState([]);
+  const [foodList, setFoodList] = useState<FoodItem[]>([]);
 
   let deliveryFee = 0;
 
@@ -34,7 +64,7 @@ const StoreContextProvider = ({ children }) => {
     setCartItems(response.data.data);
   };
 
-  const addToCart = async (itemId) => {
+  const addToCart = async (itemId: string) => {
     setCartItems((prev) => {
       if (!prev[itemId]) return { ...prev, [itemId]: 1 };
       return { ...prev, [itemId]: prev[itemId] + 1 };
@@ -51,7 +81,7 @@ const StoreContextProvider = ({ children }) => {
       await getCartItemsCount();
       toast.success(response.data.message);
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         toast.error(error.response.data.message);
       }
       console.error(error);
@@ -70,14 +100,14 @@ const StoreContextProvider = ({ children }) => {
       setCartItemsCount(itemCount);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         console.error(error.response.data.message);
       }
       console.error(error);
     }
   };
 
-  const removeFromCart = async (itemId) => {
+  const removeFromCart = async (itemId: string) => {
     // Getting minus number for count hasn't handled here because the frontend
     // will only display the decrement button when the count is higher than zero.
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
@@ -93,7 +123,7 @@ const StoreContextProvider = ({ children }) => {
       await getCartItemsCount();
       toast.success(response.data.message);
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         toast.error(error.response.data.message);
       }
       console.error(error);
@@ -130,7 +160,7 @@ const StoreContextProvider = ({ children }) => {
         console.log(response.data.success);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         console.error(error.response.data.message);
       }
       console.error(error);

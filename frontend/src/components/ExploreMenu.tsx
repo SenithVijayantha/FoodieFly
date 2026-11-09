@@ -1,8 +1,13 @@
-import React from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { menu_list } from "../assets/assets";
 
-const ExploreMenu = ({ category, setCategory }) => {
+interface ExploreMenuProps {
+  category: string;
+  setCategory: Dispatch<SetStateAction<string>>;
+}
+
+const ExploreMenu = ({ category, setCategory }: ExploreMenuProps) => {
   return (
     <>
       <div id="menu" className="flex md:justify-center gap-3 overflow-x-scroll py-5 px-5 no-scrollbar">

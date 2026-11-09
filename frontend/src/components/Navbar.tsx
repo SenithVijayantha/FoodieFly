@@ -1,11 +1,9 @@
-import React from "react";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router";
 import { useContext } from "react";
 
-import ThemeToggler from "./ThemeToggler";
 import { StoreContext } from "../context/StoreContext";
-import ProfileAvatar from "./ProfileAvatar.jsx";
+import ProfileAvatar from "./ProfileAvatar";
 
 const Navbar = () => {
   const { cartItemsCount, isAuthenticated } = useContext(StoreContext);
@@ -32,7 +30,7 @@ const Navbar = () => {
             </svg>
           </div>
           <ul
-            tabIndex="-1"
+            tabIndex={-1}
             className="menu menu-sm dropdown-content rounded-box z-10 mt-6 w-52 p-2 shadow-lg bg-primary "
           >
             <li>
@@ -67,7 +65,9 @@ const Navbar = () => {
         {/* <ThemeToggler /> */}
         {!isAuthenticated ? (
           <button
-            onClick={() => document.getElementById("my_modal_2").showModal()}
+            onClick={() =>
+              (document.getElementById("my_modal_2") as HTMLDialogElement).showModal()
+            }
             className="btn btn-outline"
           >
             Sign in

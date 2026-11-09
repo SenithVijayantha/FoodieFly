@@ -1,5 +1,3 @@
-import React from "react";
-
 const Footer = () => {
   return (
     <footer
@@ -20,7 +18,7 @@ const Footer = () => {
       </aside>
       <nav>
         <h6 className="footer-title text-2xl">COMPANY</h6>
-        <ul tabIndex="-1" className="">
+        <ul tabIndex={-1} className="">
           <li>
             <a href="#home">Home</a>
           </li>

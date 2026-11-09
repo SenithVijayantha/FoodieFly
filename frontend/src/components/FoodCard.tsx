@@ -1,8 +1,16 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { Minus, Plus } from "lucide-react";
 import { StoreContext } from "../context/StoreContext";
 
-const FoodCard = ({ id, name, price, description, image }) => {
+interface FoodCardProps {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+}
+
+const FoodCard = ({ id, name, price, description, image }: FoodCardProps) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
 
   return (

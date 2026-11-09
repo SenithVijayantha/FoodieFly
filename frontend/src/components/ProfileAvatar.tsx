@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-import { icons } from "../assets/assets.js";
-import { StoreContext } from "../context/StoreContext.jsx";
+import { icons } from "../assets/assets";
+import { StoreContext } from "../context/StoreContext";
 
 const ProfileAvatar = () => {
   const { url, setIsAuthenticated } = useContext(StoreContext);
@@ -13,7 +13,7 @@ const ProfileAvatar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Ref to the dropdown container to detect outside clicks
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Toggles the dropdown menu's visibility.
 
@@ -22,8 +22,8 @@ const ProfileAvatar = () => {
   };
 
   // Handles clicks outside of the dropdown menu to close it
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
@@ -44,7 +44,7 @@ const ProfileAvatar = () => {
         setIsAuthenticated(false);
       }
     } catch (error) {
-      if (error.response && error.response.data) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
         // toast.error(error.response.data.message);
         console.error(error.response.data.message);
       } else {
@@ -88,24 +88,22 @@ const ProfileAvatar = () => {
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="user-menu-button"
-            tabIndex="-1"
+            tabIndex={-1}
           >
             {/* Menu items */}
             <button
-              href="#"
               className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
               role="menuitem"
-              tabIndex="-1"
+              tabIndex={-1}
               onClick={handleSignOut}
             >
               Sign Out
             </button>
 
             <button
-              href="#"
               className="block px-4 py-2 text-xs font-medium cursor-pointer w-11/12 mx-auto hover:bg-white/10 rounded-lg"
               role="menuitem"
-              tabIndex="-1"
+              tabIndex={-1}
               onClick={() => navigate("/myorders")}
             >
               Orders

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   House,
@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   return (
     <div
@@ -70,7 +70,7 @@ const Sidebar = () => {
           }`}
           onClick={() => setIsSidebarOpen((prev) => !prev)}
         >
-          <SquareChevronRight width={17}/>
+          <SquareChevronRight width={17} />
         </button>
       </div>
     </div>

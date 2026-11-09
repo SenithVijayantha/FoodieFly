@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Package } from "lucide-react";
 
-const OrdersPage = ({ backendUrl }) => {
-  const [orders, setOrders] = useState([]);
+import type { ApiResponse, Order, PageProps } from "../types";
+
+const OrdersPage = ({ backendUrl }: PageProps) => {
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const fetchAllOrders = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/order/list`);
+      const response = await axios.get<ApiResponse<Order[]>>(
+        `${backendUrl}/api/order/list`
+      );
 
       if (response.data.success) {
-        setOrders(response.data.data);
+        setOrders(response.data.data ?? []);
         // console.log(response.data.data);
       } else {
         toast.error("Error fetching order list");
@@ -21,12 +26,18 @@ const OrdersPage = ({ backendUrl }) => {
     }
   };
 
-  const handleOrderStatusChange = async (e, orderId) => {
+  const handleOrderStatusChange = async (
+    e: ChangeEvent<HTMLSelectElement>,
+    orderId: string
+  ) => {
     // console.log(orderId);
-    const response = await axios.post(`${backendUrl}/api/order/update-status`, {
-      orderId,
-      status: e.target.value,
-    });
+    const response = await axios.post<ApiResponse>(
+      `${backendUrl}/api/order/update-status`,
+      {
+        orderId,
+        status: e.target.value,
+      }
+    );
 
     if (response.data.success) {
       await fetchAllOrders();

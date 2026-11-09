@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { X } from "lucide-react";
 
-const ListProductsPage = ({ backendUrl }) => {
-  const [foodList, setFoodList] = useState([]);
+import type { ApiResponse, PageProps, Product } from "../types";
+
+const ListProductsPage = ({ backendUrl }: PageProps) => {
+  const [foodList, setFoodList] = useState<Product[]>([]);
 
   const fetchList = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/food/list`);
+      const response = await axios.get<ApiResponse<Product[]>>(
+        `${backendUrl}/api/food/list`
+      );
       // console.log(response.data.data);
 
       if (response.data.success) {
-        setFoodList(response.data.data);
+        setFoodList(response.data.data ?? []);
       } else {
         console.error("API Error:", response.data.message);
         toast.error(response.data.message);
@@ -20,16 +24,23 @@ const ListProductsPage = ({ backendUrl }) => {
     } catch (error) {
       console.error(
         "Failed to fetch data:",
-        error.response ? error.response.data : error.message
+        axios.isAxiosError(error) && error.response
+          ? error.response.data
+          : error instanceof Error
+            ? error.message
+            : error
       );
       toast.error("Failed to fetch data. Please try again.");
     }
   };
 
-  const removeFoodItem = async (foodItemId) => {
-    const response = await axios.delete(`${backendUrl}/api/food/remove`, {
-      data: { id: foodItemId },
-    });
+  const removeFoodItem = async (foodItemId: string) => {
+    const response = await axios.delete<ApiResponse>(
+      `${backendUrl}/api/food/remove`,
+      {
+        data: { id: foodItemId },
+      }
+    );
     await fetchList(); // trigger an UI update
     if (response.data.success) {
       toast.success(response.data.message);

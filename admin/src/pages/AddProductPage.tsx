@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-const AddProductPage = ({ backendUrl }) => {
-  const [image, setImage] = useState(null);
-  const [productDetails, setProductDetails] = useState({
+import type { ApiResponse, PageProps } from "../types";
+
+interface ProductDetails {
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+}
+
+type FormField = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+const AddProductPage = ({ backendUrl }: PageProps) => {
+  const [image, setImage] = useState<File | null>(null);
+  const [productDetails, setProductDetails] = useState<ProductDetails>({
     name: "",
     description: "",
     price: "",
     category: "Salad",
   });
 
-  const handleProductDetails = (e) => {
+  const handleProductDetails = (e: ChangeEvent<FormField>) => {
     setProductDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handlePriceInputChange = (e) => {
+  const handlePriceInputChange = (e: ChangeEvent<FormField>) => {
     const rawValue = e.target.value;
 
     const numericRegex = /^-?(\d*\.?\d*)$/;
@@ -31,19 +43,24 @@ const AddProductPage = ({ backendUrl }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const form = e.currentTarget;
 
     const formData = new FormData();
     formData.append("name", productDetails.name);
     formData.append("description", productDetails.description);
     formData.append("price", productDetails.price);
     formData.append("category", productDetails.category);
-    formData.append("image", image);
+    if (image) formData.append("image", image);
     // console.log(productDetails);
 
     try {
-      const response = await axios.post(`${backendUrl}/api/food/add`, formData);
+      const response = await axios.post<ApiResponse>(
+        `${backendUrl}/api/food/add`,
+        formData
+      );
 
       if (response.data.success) {
         setProductDetails({
@@ -54,7 +71,7 @@ const AddProductPage = ({ backendUrl }) => {
         });
         setImage(null);
         // Reset the file input visually
-        e.target.reset();
+        form.reset();
         toast.success("Product added successfully!");
       } else {
         console.error("API Error:", response.data.message);
@@ -63,7 +80,11 @@ const AddProductPage = ({ backendUrl }) => {
     } catch (error) {
       console.error(
         "Failed to submit form:",
-        error.response ? error.response.data : error.message
+        axios.isAxiosError(error) && error.response
+          ? error.response.data
+          : error instanceof Error
+            ? error.message
+            : error
       );
       toast.error("Failed to add product. Please try again.");
     }
@@ -77,7 +98,7 @@ const AddProductPage = ({ backendUrl }) => {
           type="file"
           className="file-input"
           required
-          onChange={(e) => setImage(e.target.files[0])}
+          onChange={(e) => setImage(e.target.files?.[0] ?? null)}
         />
 
         <label className="label text-[16px]">Product name</label>

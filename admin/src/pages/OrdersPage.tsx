@@ -1,13 +1,37 @@
 import { useState, useEffect } from "react";
-import type { ChangeEvent } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { Package } from "lucide-react";
+import { toast } from "sonner";
 
-import type { ApiResponse, Order, PageProps } from "../types";
+import PageHeader from "@/components/PageHeader";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatPrice } from "@/lib/format";
+import {
+  isOrderStatus,
+  ORDER_STATUSES,
+  type ApiResponse,
+  type Order,
+  type PageProps,
+} from "@/types";
 
 const OrdersPage = ({ backendUrl }: PageProps) => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllOrders = async () => {
     try {
@@ -23,24 +47,35 @@ const OrdersPage = ({ backendUrl }: PageProps) => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleOrderStatusChange = async (
-    e: ChangeEvent<HTMLSelectElement>,
-    orderId: string
+    orderId: string,
+    status: string | null
   ) => {
     // console.log(orderId);
-    const response = await axios.post<ApiResponse>(
-      `${backendUrl}/api/order/update-status`,
-      {
-        orderId,
-        status: e.target.value,
-      }
-    );
+    if (!status || !isOrderStatus(status)) return;
 
-    if (response.data.success) {
-      await fetchAllOrders();
+    try {
+      const response = await axios.post<ApiResponse>(
+        `${backendUrl}/api/order/update-status`,
+        {
+          orderId,
+          status,
+        }
+      );
+
+      if (response.data.success) {
+        await fetchAllOrders();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update order status. Please try again.");
     }
   };
 
@@ -48,100 +83,125 @@ const OrdersPage = ({ backendUrl }: PageProps) => {
     fetchAllOrders();
   }, []);
 
+  const renderBody = () => {
+    if (isLoading) {
+      return Array.from({ length: 3 }, (_, index) => (
+        <Card key={index}>
+          <CardHeader>
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-20" />
+          </CardHeader>
+          <CardContent className="grid gap-6 md:grid-cols-2">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </CardContent>
+        </Card>
+      ));
+    }
+
+    return orders.map((order) => {
+      const itemCount = order.items.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+
+      return (
+        <Card key={order._id}>
+          <CardHeader>
+            <CardTitle className="font-mono text-sm">
+              #{order._id.slice(-6).toUpperCase()}
+            </CardTitle>
+            <CardDescription>
+              {itemCount} {itemCount === 1 ? "item" : "items"}
+            </CardDescription>
+            <CardAction className="text-lg font-semibold tabular-nums">
+              {formatPrice(order.amount)}
+            </CardAction>
+          </CardHeader>
+
+          <CardContent className="grid gap-6 md:grid-cols-2">
+            <section className="space-y-2">
+              <h3 className="text-sm font-medium">Items</h3>
+              <ul className="space-y-1.5 text-sm">
+                {order.items.map((item, index) => (
+                  <li key={index} className="flex justify-between gap-4">
+                    <span>{item.name}</span>
+                    <span className="text-muted-foreground tabular-nums">
+                      × {item.quantity}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="space-y-2">
+              <h3 className="text-sm font-medium">Delivery to</h3>
+              <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+                <dt className="text-muted-foreground">Name</dt>
+                <dd>
+                  {order.address.firstName} {order.address.lastName}
+                </dd>
+                <dt className="text-muted-foreground">Address</dt>
+                <dd>
+                  {order.address.street}, {order.address.city},{" "}
+                  {order.address.state}, {order.address.country}
+                </dd>
+                <dt className="text-muted-foreground">ZIP code</dt>
+                <dd>{order.address.zipcode}</dd>
+                <dt className="text-muted-foreground">Phone</dt>
+                <dd>{order.address.phone}</dd>
+              </dl>
+            </section>
+          </CardContent>
+
+          <CardFooter className="justify-between">
+            <span className="text-sm text-muted-foreground">Status</span>
+            <Select
+              value={order.status}
+              onValueChange={(value) =>
+                handleOrderStatusChange(order._id, value)
+              }
+            >
+              <SelectTrigger className="w-40" aria-label="Order status">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ORDER_STATUSES.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardFooter>
+        </Card>
+      );
+    });
+  };
+
   return (
-    <div className="pl-16">
-      <h3 className="text-2xl font-semibold p-4">My Orders</h3>
-      <div className="w-full overflow-x-auto">
-        <table className="table my-4 ">
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index}>
-                <td>
-                  <div className="w-md">
-                    <div className="flex flex-col gap-4">
-                      <div className="font-semibold flex gap-2 mb-6">
-                        <div className="flex justify-between bg-accent/70 p-1 rounded-md w-fit">
-                          <Package width={20} height={20} />
-                        </div>
-                        {order.items.map((item, i) => {
-                          return (
-                            <span key={i}>
-                              {item.name} x {item.quantity}
-                              {i !== order.items.length - 1 && ", "}
-                            </span>
-                          );
-                        })}
-                      </div>
-                      <div className="w-xs">
-                        <table className="table bg-base-200">
-                          <tbody>
-                            <tr>
-                              <th>
-                                <span className="font-semibold">Full Name</span>
-                              </th>
-                              <td>
-                                {order.address.firstName}{" "}
-                                {order.address.lastName}
-                              </td>
-                            </tr>
-                            <tr>
-                              <th>
-                                <span className="font-semibold">Address</span>
-                              </th>
-                              <td>
-                                {order.address.street},{order.address.city},
-                                {order.address.state},{order.address.country},
-                                lorem
-                              </td>
-                            </tr>
-                            <tr>
-                              <th>
-                                <span className="font-semibold">Zip Code</span>
-                              </th>
-                              <td>{order.address.zipcode}</td>
-                            </tr>
-                            <tr>
-                              <th>
-                                <span className="font-semibold">
-                                  Telephone No
-                                </span>
-                              </th>
-                              <td>{order.address.phone}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-2 mt-8">
-                    <div className="flex justify-between font-semibold">
-                      <span>${order.amount}</span>
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <div className="flex justify-between">
-                      <span>items: {order.items.length}</span>
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <div className="flex  font-semibold">
-                      <select
-                        className="select text-accent uppercase text-xs w-fit"
-                        onChange={(e) => handleOrderStatusChange(e, order._id)}
-                        value={order.status}
-                      >
-                        <option value={"Processing"}>Processing</option>
-                        <option value={"Shipped"}>Shipped</option>
-                        <option value={"Delivered"}>Delivered</option>
-                      </select>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Orders"
+        description={
+          isLoading
+            ? undefined
+            : `${orders.length} ${orders.length === 1 ? "order" : "orders"}`
+        }
+      />
+
+      {!isLoading && orders.length === 0 ? (
+        <Card className="items-center py-12 text-center">
+          <CardContent className="space-y-1">
+            <p className="font-medium">No orders yet</p>
+            <p className="text-sm text-muted-foreground">
+              New orders from customers will appear here.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4">{renderBody()}</div>
+      )}
     </div>
   );
 };

@@ -1,33 +1,85 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { ImagePlus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-import type { ApiResponse, PageProps } from "../types";
+import PageHeader from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  isProductCategory,
+  PRODUCT_CATEGORIES,
+  type ApiResponse,
+  type PageProps,
+  type ProductCategory,
+} from "@/types";
 
 interface ProductDetails {
   name: string;
   description: string;
   price: string;
-  category: string;
+  category: ProductCategory;
 }
 
-type FormField = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+const DEFAULT_CATEGORY: ProductCategory = "Salad";
 
 const AddProductPage = ({ backendUrl }: PageProps) => {
   const [image, setImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [productDetails, setProductDetails] = useState<ProductDetails>({
     name: "",
     description: "",
     price: "",
-    category: "Salad",
+    category: DEFAULT_CATEGORY,
   });
 
-  const handleProductDetails = (e: ChangeEvent<FormField>) => {
+  useEffect(() => {
+    if (!image) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(image);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [image]);
+
+  const handleProductDetails = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setProductDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handlePriceInputChange = (e: ChangeEvent<FormField>) => {
+  const handleCategoryChange = (value: string | null) => {
+    if (value && isProductCategory(value)) {
+      setProductDetails((prev) => ({ ...prev, category: value }));
+    }
+  };
+
+  const handlePriceInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
 
     const numericRegex = /^-?(\d*\.?\d*)$/;
@@ -46,6 +98,11 @@ const AddProductPage = ({ backendUrl }: PageProps) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!image) {
+      toast.error("Choose an image for the product.");
+      return;
+    }
+
     const form = e.currentTarget;
 
     const formData = new FormData();
@@ -53,9 +110,10 @@ const AddProductPage = ({ backendUrl }: PageProps) => {
     formData.append("description", productDetails.description);
     formData.append("price", productDetails.price);
     formData.append("category", productDetails.category);
-    if (image) formData.append("image", image);
+    formData.append("image", image);
     // console.log(productDetails);
 
+    setIsSubmitting(true);
     try {
       const response = await axios.post<ApiResponse>(
         `${backendUrl}/api/food/add`,
@@ -67,7 +125,7 @@ const AddProductPage = ({ backendUrl }: PageProps) => {
           name: "",
           description: "",
           price: "",
-          category: "",
+          category: DEFAULT_CATEGORY,
         });
         setImage(null);
         // Reset the file input visually
@@ -87,69 +145,134 @@ const AddProductPage = ({ backendUrl }: PageProps) => {
             : error
       );
       toast.error("Failed to add product. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="pl-16">
-      <form className="fieldset rounded-box p-4" onSubmit={handleSubmit}>
-        <label className="label text-[16px]">Upload Image</label>
-        <input
-          type="file"
-          className="file-input"
-          required
-          onChange={(e) => setImage(e.target.files?.[0] ?? null)}
-        />
+    <div className="space-y-6">
+      <PageHeader
+        title="Add product"
+        description="Publish a new dish to the menu."
+      />
 
-        <label className="label text-[16px]">Product name</label>
-        <input
-          name="name"
-          type="text"
-          className="input"
-          placeholder="Type here"
-          onChange={handleProductDetails}
-          value={productDetails.name}
-          required
-        />
+      <form
+        onSubmit={handleSubmit}
+        className="grid items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Image</CardTitle>
+            <CardDescription>JPG, PNG or WebP.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Field>
+              <FieldLabel htmlFor="image">Upload image</FieldLabel>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                required
+                onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+              />
+            </Field>
+            <div className="flex aspect-4/3 items-center justify-center overflow-hidden rounded-lg border border-dashed bg-muted/40">
+              {previewUrl ? (
+                <img
+                  src={previewUrl}
+                  alt=""
+                  className="size-full object-cover"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
+                  <ImagePlus className="size-6" />
+                  No image selected
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
-        <label className="label text-[16px]">Product Description</label>
-        <textarea
-          name="description"
-          className="textarea"
-          placeholder="Write content here"
-          value={productDetails.description}
-          onChange={handleProductDetails}
-          required
-        ></textarea>
+        <Card>
+          <CardHeader>
+            <CardTitle>Details</CardTitle>
+            <CardDescription>
+              Shown to customers on the menu and at checkout.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="name">Product name</FieldLabel>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Caesar salad"
+                  autoComplete="off"
+                  value={productDetails.name}
+                  onChange={handleProductDetails}
+                  required
+                />
+              </Field>
 
-        <label className="label text-[16px]">Product Category</label>
-        <select
-          defaultValue="Pick a color"
-          className="select"
-          name="category"
-          onChange={handleProductDetails}
-          required
-        >
-          <option value="Salad">Salad</option>
-          <option value="Beverages">Beverages</option>
-          <option value="Desserts">Desserts</option>
-          <option value="Starters">Starters</option>
-          <option value="Main Course">Main Course</option>
-          <option value="Sides">Sides</option>
-        </select>
+              <Field>
+                <FieldLabel htmlFor="description">Description</FieldLabel>
+                <Textarea
+                  id="description"
+                  name="description"
+                  placeholder="Ingredients, portion size, allergens"
+                  value={productDetails.description}
+                  onChange={handleProductDetails}
+                  required
+                />
+              </Field>
 
-        <label className="label text-[16px]">Product Price</label>
-        <input
-          type="text"
-          className="input"
-          name="price"
-          placeholder="$32.00"
-          value={productDetails.price}
-          onChange={handlePriceInputChange}
-          required
-        />
+              <div className="grid gap-6 sm:grid-cols-2">
+                <Field>
+                  <FieldLabel htmlFor="category">Category</FieldLabel>
+                  <Select
+                    value={productDetails.category}
+                    onValueChange={handleCategoryChange}
+                  >
+                    <SelectTrigger id="category" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PRODUCT_CATEGORIES.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-        <button className="btn btn-neutral mt-4 w-fit uppercase">Add</button>
+                <Field>
+                  <FieldLabel htmlFor="price">Price (USD)</FieldLabel>
+                  <Input
+                    id="price"
+                    type="text"
+                    inputMode="decimal"
+                    name="price"
+                    placeholder="0.00"
+                    value={productDetails.price}
+                    onChange={handlePriceInputChange}
+                    required
+                  />
+                  <FieldDescription>Digits and one decimal point.</FieldDescription>
+                </Field>
+              </div>
+            </FieldGroup>
+          </CardContent>
+          <CardFooter className="justify-end">
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="animate-spin" />}
+              {isSubmitting ? "Adding…" : "Add product"}
+            </Button>
+          </CardFooter>
+        </Card>
       </form>
     </div>
   );

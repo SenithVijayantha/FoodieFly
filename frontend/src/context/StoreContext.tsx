@@ -53,7 +53,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const fetchFoodList = async () => {
     try {
       const response = await axios.get(`${url}/api/food/list`);
-      setFoodList(response.data.data);
+      setFoodList(response.data.data ?? []);
     } catch (error) {}
   };
 
@@ -61,7 +61,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     const response = await axios.get(`${url}/api/cart/get`, {
       withCredentials: true,
     });
-    setCartItems(response.data.data);
+    setCartItems(response.data.data ?? {});
   };
 
   const addToCart = async (itemId: string) => {
@@ -94,7 +94,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         withCredentials: true,
       });
 
-      const itemCount = Object.keys(response.data.data).length;
+      const itemCount = Object.keys(response.data.data ?? {}).length;
 
       if (itemCount !== 0) {
       setCartItemsCount(itemCount);

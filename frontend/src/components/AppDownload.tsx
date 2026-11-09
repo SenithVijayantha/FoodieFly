@@ -1,31 +1,42 @@
+import { Button } from "@/components/ui/button";
 import { icons } from "../assets/assets";
 
 const AppDownload = () => {
   return (
-    <div
-      id="mobile-app"
-      className="flex gap-10 flex-col items-center justify-center py-32"
-    >
-      <p className="text-2xl text-center">
-        For better experience download <br />
-        <span className="font-bold">FoodieFly</span> App
-      </p>
-      <div className="flex gap-4 flex-col sm:flex-row">
-        <button className="btn bg-black py-8 rounded-lg hover:scale-105 transition-transform">
-          <img width={40} src={icons.play_store} alt="play store icon" />
-          <div className="flex flex-col text-start">
-            <span>Get it on</span> <span className="text-xl">Google Play</span>
-          </div>
-        </button>
-        <button className="btn bg-black py-8 rounded-lg hover:scale-105 transition-transform">
-          <img width={40} src={icons.apple} alt="app store icon" />
-          <div className="flex flex-col text-start">
-            <span>Download it on</span>{" "}
-            <span className="text-xl">App Store</span>
-          </div>
-        </button>
+    <section id="mobile-app" className="wrap py-14">
+      <div className="grid items-center gap-8 rounded-3xl bg-brand px-8 py-14 text-brand-foreground sm:px-14 md:grid-cols-2">
+        <div>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Order faster in the FoodieFly app</h2>
+          <p className="mt-3 max-w-md text-brand-foreground/80">
+            Save your addresses and keep your favourite dishes one tap away.
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row md:justify-end">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="h-auto justify-start gap-3 rounded-2xl px-5 py-3 transition-transform hover:scale-[1.02]"
+          >
+            <img src={icons.play_store} alt="" width={36} height={36} />
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-xs text-muted-foreground">Get it on</span>
+              <span className="text-lg font-semibold">Google Play</span>
+            </span>
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="h-auto justify-start gap-3 rounded-2xl px-5 py-3 transition-transform hover:scale-[1.02]"
+          >
+            <img src={icons.apple} alt="" width={36} height={36} />
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-xs text-muted-foreground">Download on the</span>
+              <span className="text-lg font-semibold">App Store</span>
+            </span>
+          </Button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

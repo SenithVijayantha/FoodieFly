@@ -1,18 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 import { StoreContext } from "../context/StoreContext";
 
 const VerifyPayment = () => {
   const { url } = useContext(StoreContext);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const success = searchParams.get("success");
   const orderId = searchParams.get("orderId");
-
-  const [loading, setLoading] = useState(true);
-  //   console.log(success, orderId);
 
   const verify = async () => {
     try {
@@ -22,15 +20,9 @@ const VerifyPayment = () => {
         { withCredentials: true }
       );
 
-      if (response.data.success) {
-        navigate("/myorders");
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
+      navigate(response.data.success ? "/myorders" : "/");
+    } catch {
       navigate("/");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -39,11 +31,13 @@ const VerifyPayment = () => {
   }, []);
 
   return (
-    <div>
-      {loading && (
-        <span className="loading loading-spinner text-primary"></span>
-      )}
-    </div>
+    <section
+      role="status"
+      className="wrap flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center"
+    >
+      <Loader2 className="size-8 animate-spin text-primary" />
+      <p className="text-lg text-muted-foreground">Confirming your payment…</p>
+    </section>
   );
 };
 

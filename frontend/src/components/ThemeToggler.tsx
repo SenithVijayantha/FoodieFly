@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { SunMedium, Moon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 type Theme = "light" | "dark";
 
 const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined" && window.localStorage) {
     const storedTheme = window.localStorage.getItem("theme");
-    if (typeof storedTheme === "string" && (storedTheme === "light" || storedTheme === "dark")) {
+    if (storedTheme === "light" || storedTheme === "dark") {
       return storedTheme;
     }
 
@@ -16,15 +18,14 @@ const getInitialTheme = (): Theme => {
     }
   }
 
-  return "light"; // default theme
+  return "light";
 };
-
 
 const ThemeToggler = () => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -33,9 +34,14 @@ const ThemeToggler = () => {
   };
 
   return (
-    <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+    >
       {theme === "light" ? <Moon /> : <SunMedium />}
-    </button>
+    </Button>
   );
 };
 

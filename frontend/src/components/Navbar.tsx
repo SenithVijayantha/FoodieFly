@@ -1,82 +1,86 @@
-import { ShoppingCart } from "lucide-react";
-import { Link } from "react-router";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { Menu, ShoppingBag } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { StoreContext } from "../context/StoreContext";
 import ProfileAvatar from "./ProfileAvatar";
 
-const Navbar = () => {
+const sectionLinks = [
+  { href: "/#menu", label: "Menu" },
+  { href: "/#mobile-app", label: "Mobile app" },
+  { href: "/#footer", label: "Contact" },
+];
+
+interface NavbarProps {
+  onSignIn: () => void;
+}
+
+const Navbar = ({ onSignIn }: NavbarProps) => {
   const { cartItemsCount, isAuthenticated } = useContext(StoreContext);
 
   return (
-    <div className="max-w-[1920px] sticky top-0 z-10 navbar bg-primary/60 backdrop-blur-md shadow-sm">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <header className="sticky top-0 z-30 border-b border-border/70 bg-background/85 backdrop-blur-md">
+      <div className="wrap flex h-16 items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" />
+              }
             >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h7"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex={-1}
-            className="menu menu-sm dropdown-content rounded-box z-10 mt-6 w-52 p-2 shadow-lg bg-primary "
-          >
-            <li>
-              <a href="#home">Home</a>
-            </li>
-            <li>
-              <a href="#menu">Menu</a>
-            </li>
-            <li>
-              <a href="#mobile-app">Mobile App</a>
-            </li>
-            <li>
-              <a href="#footer">Contact Us</a>
-            </li>
-          </ul>
+              <Menu />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-44">
+              {sectionLinks.map((link) => (
+                <DropdownMenuItem key={link.href} render={<a href={link.href} />}>
+                  {link.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Link to="/" className="flex items-center gap-2 font-heading text-xl font-semibold">
+            <img src="/logo.png" alt="" width={32} height={32} />
+            FoodieFly
+          </Link>
         </div>
-        <Link to="/" className="btn btn-ghost text-xl">
-          FoodieFly
-        </Link>
-      </div>
-      <div className="navbar-end sm:gap-2">
-        <Link to="/cart" className="indicator btn btn-ghost btn-circle">
-          <ShoppingCart />
-          {cartItemsCount > 0 ? (
-            <span className="badge badge-sm indicator-item">
-              {cartItemsCount}
-            </span>
-          ) : (
-            <></>
-          )}
-        </Link>
-        {/* <ThemeToggler /> */}
-        {!isAuthenticated ? (
-          <button
-            onClick={() =>
-              (document.getElementById("my_modal_2") as HTMLDialogElement).showModal()
-            }
-            className="btn btn-outline"
+
+        <nav aria-label="Main" className="hidden items-center gap-8 text-sm font-medium md:flex">
+          {sectionLinks.map((link) => (
+            <a key={link.href} href={link.href} className="link-draw">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Link
+            to="/cart"
+            aria-label={`Cart, ${cartItemsCount} items`}
+            className={buttonVariants({ variant: "ghost", size: "icon", className: "relative" })}
           >
-            Sign in
-          </button>
-        ) : (
-          <ProfileAvatar />
-        )}
+            <ShoppingBag />
+            {cartItemsCount > 0 && (
+              <Badge className="absolute -top-1 -right-1 h-5 min-w-5 px-1">{cartItemsCount}</Badge>
+            )}
+          </Link>
+          {isAuthenticated ? (
+            <ProfileAvatar />
+          ) : (
+            <Button variant="outline" onClick={onSignIn}>
+              Sign in
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
 

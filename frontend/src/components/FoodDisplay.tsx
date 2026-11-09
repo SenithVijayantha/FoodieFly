@@ -9,34 +9,44 @@ interface FoodDisplayProps {
 const FoodDisplay = ({ category }: FoodDisplayProps) => {
   const { foodList } = useContext(StoreContext);
 
+  const items = foodList.filter(
+    (item) => category === "All" || category === item.category
+  );
+
   return (
-    <div className="py-16">
-      <h2 className="text-3xl font-semibold text-center mb-16">
-        Top dishes near you
-      </h2>
-      <div
-        className="grid gap-6 sm:gap-8 md:gap-10 lg:gap-12 sm:grid-cols-2 md:grid-cols-3 justify-center px-10"
-        style={{
-          gridTemplateColumns: "repeat(auto-fit, 336px)",
-        }}
-      >
-        {foodList.map((item, index) => {
-          if (category === "All" || category === item.category) {
-            // If selected category is equal to category of the item only the that item will return
-            return (
-              <FoodCard
-                key={index}
-                id={item._id}
-                name={item.name}
-                description={item.description}
-                price={item.price}
-                image={item.image}
-              />
-            );
-          }
-        })}
+    <section className="wrap py-14">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 className="text-3xl font-semibold sm:text-4xl">
+            {category === "All" ? "Dishes near you" : category}
+          </h2>
+          <p className="mt-2 text-muted-foreground">
+            {items.length} {items.length === 1 ? "dish" : "dishes"}
+          </p>
+        </div>
       </div>
-    </div>
+
+      {items.length === 0 ? (
+        <p className="mt-10 rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
+          {foodList.length === 0
+            ? "Dishes will appear here once the menu loads."
+            : `No dishes in ${category} yet.`}
+        </p>
+      ) : (
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {items.map((item) => (
+            <FoodCard
+              key={item._id}
+              id={item._id}
+              name={item.name}
+              description={item.description}
+              price={item.price}
+              image={item.image}
+            />
+          ))}
+        </div>
+      )}
+    </section>
   );
 };
 

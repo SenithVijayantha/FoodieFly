@@ -9,39 +9,41 @@ interface ExploreMenuProps {
 
 const ExploreMenu = ({ category, setCategory }: ExploreMenuProps) => {
   return (
-    <>
-      <div id="menu" className="flex md:justify-center gap-3 overflow-x-scroll py-5 px-5 no-scrollbar">
-        {menu_list.map((item, index) => (
-          <div
-            key={index}
-            className="cursor-pointer flex-shrink-0 flex flex-col items-center gap-2 hover:scale-110 transition-transform ease-in-out"
-            onClick={() =>
-              setCategory((prev) =>
-                prev === item.menu_name ? "All" : item.menu_name
-              )
-            }
-          >
-            <img
-              className={`w-30 h-30 rounded-lg object-cover ${
-                category === item.menu_name ? "border-4 border-primary" : ""
-              }`}
-              src={item.menu_image}
-              alt=""
-            />
-            <p
-              className={
-                category === item.menu_name
-                  ? "text-primary font-semibold"
-                  : "text-slate-300"
-              }
-            >
-              {item.menu_name}
-            </p>
-          </div>
-        ))}
+    <section id="menu" className="wrap py-14">
+      <div>
+        <h2 className="text-3xl font-semibold sm:text-4xl">Explore by category</h2>
+        <p className="mt-2 text-muted-foreground">
+          Pick a category to filter the dishes below.
+        </p>
       </div>
-      <div className="divider"></div>
-    </>
+      <div className="no-scrollbar mt-8 flex gap-4 overflow-x-auto py-2 md:justify-between">
+        {menu_list.map((item) => {
+          const selected = category === item.menu_name;
+          return (
+            <button
+              key={item.menu_name}
+              type="button"
+              aria-pressed={selected}
+              onClick={() =>
+                setCategory((prev) => (prev === item.menu_name ? "All" : item.menu_name))
+              }
+              className="group relative h-44 w-40 shrink-0 cursor-pointer overflow-hidden rounded-2xl text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:w-48"
+            >
+              <span className="photo-frame absolute inset-0 block">
+                <img src={item.menu_image} alt="" className="size-full object-cover" loading="lazy" />
+              </span>
+              <span className="absolute inset-0 bg-linear-to-t from-black/75 via-black/10 to-transparent" />
+              <span className="absolute inset-x-4 bottom-3 font-semibold text-white">
+                {item.menu_name}
+              </span>
+              {selected && (
+                <span className="absolute inset-0 rounded-2xl ring-4 ring-primary ring-inset" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 

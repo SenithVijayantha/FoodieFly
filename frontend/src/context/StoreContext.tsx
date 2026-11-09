@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 // import { foodList } from "../assets/assets";
 

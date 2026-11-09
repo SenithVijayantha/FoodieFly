@@ -1,44 +1,48 @@
 const Footer = () => {
   return (
-    <footer
-      id="footer"
-      className="footer sm:footer-horizontal bg-primary text-neutral-content p-10"
-    >
-      <aside>
-        <div className="flex items-center gap-2">
-          <img width={40} src="/logo.png" alt="" />
-          <p className="text-4xl font-bold">FoodieFly</p>
+    <footer id="footer" className="border-t border-border bg-background">
+      <div className="wrap grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="" width={36} height={36} />
+            <span className="font-heading text-2xl font-semibold">FoodieFly</span>
+          </div>
+          <p className="mt-4 max-w-md text-muted-foreground">
+            FoodieFly connects you with local restaurants and delivers their food to your
+            door. Browse, order and track in one place.
+          </p>
         </div>
-        <p className="max-w-md">
-          FoodieFly brings your favorite meals straight to your doorstep. Fast,
-          fresh, and full of flavor. From local favorites to international
-          delights, we connect you with the best restaurants around you. Order
-          now and let FoodieFly make every meal a little more special!
-        </p>
-      </aside>
-      <nav>
-        <h6 className="footer-title text-2xl">COMPANY</h6>
-        <ul tabIndex={-1} className="">
-          <li>
-            <a href="#home">Home</a>
-          </li>
-          <li>
-            <a href="#menu">Menu</a>
-          </li>
-          <li>
-            <a href="#mobile-app">Mobile App</a>
-          </li>
-          <li>
-            <a href="#footer">Contact Us</a>
-          </li>
-        </ul>
-        <aside></aside>
-      </nav>
-      <aside>
-        <h6 className="footer-title text-2xl">GET IN TOUCH</h6>
-        <p>+1-452-96-5654</p>
-        <p>contact@foodiefly.com</p>
-      </aside>
+        <nav aria-label="Company">
+          <h3 className="text-sm font-semibold tracking-wider uppercase">Company</h3>
+          <ul className="mt-4 grid gap-3 text-muted-foreground">
+            <li>
+              <a href="/#menu" className="link-draw hover:text-foreground">
+                Menu
+              </a>
+            </li>
+            <li>
+              <a href="/#mobile-app" className="link-draw hover:text-foreground">
+                Mobile app
+              </a>
+            </li>
+            <li>
+              <a href="/#footer" className="link-draw hover:text-foreground">
+                Contact us
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div>
+          <h3 className="text-sm font-semibold tracking-wider uppercase">Get in touch</h3>
+          <ul className="mt-4 grid gap-3 text-muted-foreground">
+            <li>+1-452-96-5654</li>
+            <li>contact@foodiefly.com</li>
+          </ul>
+        </div>
+      </div>
+      <div className="wrap border-t border-border py-6 text-sm text-muted-foreground">
+        © {new Date().getFullYear()} FoodieFly. All rights reserved.
+      </div>
     </footer>
   );
 };
